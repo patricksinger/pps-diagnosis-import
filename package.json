@@ -1,0 +1,23 @@
+{
+  "name": "pps-diagnosis-import",
+  "version": "1.0.0",
+  "description": "wisconsin pps diagnosis import tool",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/patricksinger/pps-diagnosis-import.git"
+  },
+  "author": "Patrick Singer",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/patricksinger/pps-diagnosis-import/issues"
+  },
+  "homepage": "https://github.com/patricksinger/pps-diagnosis-import#readme",
+  "dependencies": {
+    "csvtojson": "^2.0.6",
+    "jsontoxml": "^1.0.0"
+  }
+}
