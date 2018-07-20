@@ -4,6 +4,8 @@ const fs = require("fs");
 const config = require("./config");
 const stringutils = require("./stringutils");
 
+console.log("Coverting CSV to XML Import File...");
+
 csvParser()
 	.fromFile(config.CSV_PATH)
 	.then((jsonOutput) => {
@@ -101,9 +103,10 @@ function createExportXML(json) {
 
 	// output to file 
 	fs.writeFileSync('import.xml', output);
+	console.log("Export File Completed.")
 }
 
 // ONLY SELECT ACTIVE EPISODES OR ALL?
 // TAKE OUT CLASSIFICATION LIMIT ON DIAGNOSES
 // MAKE P DIAGNOSIS REQUIRED / CLASSIFICATION REQUIRED ON DIAGNOSIS
-// rename a couple of clients to match
+// SQL DI 1-7 check other fields for duplicate values
