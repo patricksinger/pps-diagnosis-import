@@ -1,3 +1,6 @@
+.eslintrc
 node_modules
+todo
 *.csv
 *.xml
+*.txt

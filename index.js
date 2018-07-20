@@ -1,49 +1,31 @@
-const csv = require("csvtojson");
+const csvParser = require("csvtojson");
 const jsonxml = require("jsontoxml");
 const fs = require("fs");
+const config = require("./config");
+const stringutils = require("./stringutils");
 
-const csvPath = "./export2.csv";
-
-// utility functions
-function escapeRegExp(str) {
-	return str.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
-}
-
-function replaceAll(str, find, replace) {
-	return str.replace(new RegExp(escapeRegExp(find), 'g'), replace);
-}
-
-// SET FORM/OPTION ID
-const OPTION_ID = "USER52"; // need as env or arg passed in
-const MAIN_TABLE = "SYSTEM.user_pps_mh_NonEpisodic";
-const SPC_TABLE = "SYSTEM.user_pps_mh_spc";
-
-// ONLY SELECT ACTIVE EPISODES OR ALL?
-// TAKE OUT CLASSIFICATION LIMIT ON DIAGNOSES
-// MAKRE P DIAGNOSIS REQUIRED / CLASSIFICATION REQUIRED ON DIAGNOSIS
-
-csv()
-	.fromFile(csvPath)
-	.then((json) => {
-		createExportXML(json);
+csvParser()
+	.fromFile(config.CSV_PATH)
+	.then((jsonOutput) => {
+		createExportXML(jsonOutput);
 	});
 
 function createExportXML(json) {
 
-	var xmlExport = {
+	let xmlExport = {
 		option: {
-			optionidentifier: OPTION_ID,
+			optionidentifier: config.OPTION_ID,
 			optiondataplaceholder: []
 		}
 	}
 
-	var currentClient = '';
-	var currentMainModule = '';
-	var optionItem = {};
+	let currentClient = '';
+	let currentMainModule = '';
+	let optionItem = {};
 
 	json.forEach((element) => {
 
-		if (currentClient != element.PATID) {
+		if (currentClient !== element.PATID) {
 			currentClient = element.PATID;
 			currentMainModule = element.module_id;
 
@@ -51,9 +33,6 @@ function createExportXML(json) {
 				xmlExport.option.optiondataplaceholder.push(optionItem);
 			}
 
-			console.log("Processing New Client Entry...");
-
-			// build top of optionItem elements
 			optionItem = {
 				optiondata: {
 					PATID: element.PATID,
@@ -68,14 +47,12 @@ function createExportXML(json) {
 			}
 
 		} else {
-			if (currentMainModule != element.module_id) {
+			if (currentMainModule !== element.module_id) {
 				currentModule = element.module_id;
 
 				if (optionItem) {
 					xmlExport.option.optiondataplaceholder.push(optionItem);
 				}
-
-				console.log('Adding New Module for Current Client...');
 
 				optionItem = {
 					optiondata: {
@@ -91,7 +68,6 @@ function createExportXML(json) {
 				}
 			}
 		}
-
 		// add MI SPC values
 		if (element.spc_id) {
 			if (!("spcplaceholder" in optionItem.optiondata.maintable)) {
@@ -107,27 +83,27 @@ function createExportXML(json) {
 				}
 			});
 		}
-		else {
-			console.log('no spc');
-		}
 	});
-
 
 	if (optionItem) {
 		xmlExport.option.optiondataplaceholder.push(optionItem);
 	}
 
-
-	// generate xml
-	let output = jsonxml(xmlExport, { xmlHeader: true });
-	output = replaceAll(output, "<optiondataplaceholder>", "");
-	output = replaceAll(output, "</optiondataplaceholder>", "");
-
-	output = replaceAll(output, "maintable", MAIN_TABLE);
-
-	output = replaceAll(output, "<spcplaceholder>", "");
-	output = replaceAll(output, "</spcplaceholder>", "");
+	// generate xml / strip out placeholder xml elements
+	let output = jsonxml(xmlExport, {
+		xmlHeader: true
+	});
+	output = stringutils.replaceAll(output, "<optiondataplaceholder>", "");
+	output = stringutils.replaceAll(output, "</optiondataplaceholder>", "");
+	output = stringutils.replaceAll(output, "<spcplaceholder>", "");
+	output = stringutils.replaceAll(output, "</spcplaceholder>", "");
+	output = stringutils.replaceAll(output, "maintable", config.MAIN_TABLE);
 
 	// output to file 
 	fs.writeFileSync('import.xml', output);
 }
+
+// ONLY SELECT ACTIVE EPISODES OR ALL?
+// TAKE OUT CLASSIFICATION LIMIT ON DIAGNOSES
+// MAKE P DIAGNOSIS REQUIRED / CLASSIFICATION REQUIRED ON DIAGNOSIS
+// rename a couple of clients to match
