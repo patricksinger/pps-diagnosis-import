@@ -1,64 +1,75 @@
 // set variables for scope
-var loadedArray = [];
+var programArray = [];
 var currentIndex = "";
-var currentCode = "";
-var currentValue = "";
+var dragging = null;
 
-document.getElementById("addProgram").addEventListener("click", function () {
-  // TODO: refactor to separate function handler
-  currentCode = document.getElementById("programCode").value;
-  currentValue = document.getElementById("programValue").value;
+const RANK_INCREMENT_MULTIPLIER = 100;
+
+// event handlers
+document.getElementById("add-program-btn").addEventListener("click", addProgramHandler);
+document.getElementById("clear-program-btn").addEventListener("click", clearProgramHandler);
+document.getElementById("generate-sql-btn").addEventListener("click", generateSQLHandler);
+document.getElementById("program-list").addEventListener("dblclick", editProgramHandler);
+
+document.getElementById("program-list").addEventListener('dragstart', programListDragHandler);
+document.getElementById("program-list").addEventListener('dragover', programListDragOverHandler);
+document.getElementById("program-list").addEventListener('dragleave', programListDragLeaveHandler);
+document.getElementById("program-list").addEventListener('drop', programListDragDropHandler);
+
+// add / edit program to list
+function addProgramHandler() {
+  const currentCode = document.getElementById("program-code-inpt").value;
+  const currentValue = document.getElementById("program-value-inpt").value;
 
   if (currentCode) {
-    updateProgramList(currentCode, currentValue ? currentValue : currentCode);
+    updateProgramArray(currentCode, currentValue ? currentValue : currentCode);
   } else {
     // TODO: output to alert style component on page
     console.log("No Program Information Entered");
   }
-});
+}
 
-document.getElementById("clearProgram").addEventListener("click", clearProgramEntry);
-document.getElementById("generateSQL").addEventListener("click", generateSQL);
+function updateProgramArray(code, value) {
 
-function updateProgramList(code, value) {
-  // TODO: check if already exists
   if (currentIndex) {
-    // update to existing entry
-    loadedArray[currentIndex].code = document.getElementById("programCode").value;
-    loadedArray[currentIndex].value = document.getElementById("programValue").value;
-    currentIndex = '';
-  } else if (loadedArray.filter(program => program.code === code || program.value === value).length > 0) {
+    // update to existing entry / loaded index
+    programArray[currentIndex].code = code;
+    programArray[currentIndex].value = value;
+    currentIndex = "";
+  } else if (programArray.filter(program => program.code === code || program.value === value).length > 0) {
     // code or value already present in list
     // TODO: output to alert style component on page
     console.log("Program Code or Value Already Entered in List");
   } else {
     // add to list
-    loadedArray.push({
-      code: code,
-      value: value
+    programArray.push({
+      code,
+      value
     });
+    console.log(programArray);
   }
 
   // clean up and re-render list
-  clearProgramEntry();
+  clearProgramHandler();
   renderProgramList()
 }
 
-function clearProgramEntry() {
+function clearProgramHandler() {
   // reset entry fields and buttons to original state
-  document.getElementById("programCode").value = '';
-  document.getElementById("programValue").value = '';
-  document.getElementById("addProgram").innerHTML = "Add Program"
+  document.getElementById("program-code-inpt").value = '';
+  document.getElementById("program-value-inpt").value = '';
+  document.getElementById("add-program-btn").innerHTML = "Add Program"
 }
 
 function renderProgramList() {
   var listElement;
   var listElementContent;
+  var listElementDelete;
+  var programList = document.getElementById("program-list");
 
-  document.getElementById("programList").innerHTML = '';
+  programList.innerHTML = '';
 
-  loadedArray.forEach(function (program, index) {
-
+  programArray.forEach(function (program, index) {
     listElement = document.createElement("li");
     listElement.setAttribute("draggable", "true");
     listElement.setAttribute("class", "sortable-bulk");
@@ -66,92 +77,55 @@ function renderProgramList() {
     listElement.setAttribute("pcode", program.code);
     listElement.setAttribute("pvalue", program.value);
 
-    listElementContent = document.createTextNode("Priority : " + (index + 1) + " - " + program.code + " / " + program.value);
+    listElementContent = document.createTextNode(`Priority : ${(index + 1)} - ${program.code} / ${program.value}`);
     listElement.appendChild(listElementContent);
-    document.getElementById("programList").appendChild(listElement);
 
+    // icon delete icon
+    listElementDelete = document.createElement("ion-icon");
+    listElementDelete.setAttribute("name", "heart");
+    
+    listElement.appendChild(listElementDelete);
+
+    programList.appendChild(listElement);
   });
 }
 
-var dragging = null;
-
-document.getElementById("programList").addEventListener('dragstart', function (event) {
-  dragging = event.target;
-  //event.dataTransfer.setData('text/html', dragging);
-});
-
-document.getElementById("programList").addEventListener('dragover', function (event) {
-  event.preventDefault();
-  //window.requestAnimationFrame(function(){
-  var bounding = event.target.getBoundingClientRect()
-  var offset = bounding.y + (bounding.height / 2);
-  if (event.clientY - offset > 0) {
-    event.target.style['border-bottom'] = 'solid 4px blue';
-    event.target.style['border-top'] = '';
-  } else {
-    event.target.style['border-top'] = 'solid 4px blue';
-    event.target.style['border-bottom'] = '';
-  }
-  //});
-});
-
-document.getElementById("programList").addEventListener('dragleave', function (event) {
-  event.target.style['border-bottom'] = '';
-  event.target.style['border-top'] = '';
-});
-
-document.getElementById("programList").addEventListener('drop', function (event) {
-  event.preventDefault();
-  if (event.target.style['border-bottom'] !== '') {
-    event.target.style['border-bottom'] = '';
-    event.target.parentNode.insertBefore(dragging, event.target.nextSibling);
-  } else {
-    event.target.style['border-top'] = '';
-    event.target.parentNode.insertBefore(dragging, event.target);
-  }
-
-  // reindex list based on new order of items
-  reindexList();
-});
-
-document.getElementById("programList").addEventListener("dblclick", function (event) {
+function editProgramHandler(event) {
 
   // TODO: load target item in to editor view
   currentIndex = event.target.getAttribute("id");
-  document.getElementById("programCode").value = event.target.getAttribute("pcode");
-  document.getElementById("programValue").value = event.target.getAttribute("pvalue");
+  document.getElementById("program-code-inpt").value = event.target.getAttribute("pcode");
+  document.getElementById("program-value-inpt").value = event.target.getAttribute("pvalue");
+  document.getElementById("add-program-btn").innerHTML = "Update Value";
 
-  document.getElementById("addProgram").innerHTML = "Update Value"
-
-});
-
+}
 
 function reindexList() {
-  var list = document.getElementById("programList");
+  var list = document.getElementById("program-list");
   var listItems = list.getElementsByTagName("li");
 
-  loadedArray = [];
+  programArray = [];
 
   for (var i = 0; i < listItems.length; i++) {
     listItems[i].setAttribute("id", i);
-    loadedArray.push({
+    programArray.push({
       code: listItems[i].getAttribute("pcode"),
       value: listItems[i].getAttribute("pvalue")
     });
   };
 
-  // reload list
+  // re-render list
   renderProgramList();
 }
 
 
-function generateSQL() {
+function generateSQLHandler() {
 
-  var programOutput = loadedArray.reverse().map(function (program, index) {
+  var programOutput = programArray.reverse().map(function (program, index) {
     return {
       code: program.code,
       value: program.value,
-      weight: (index * 100) + 100
+      weight: (index * RANK_INCREMENT_MULTIPLIER) + RANK_INCREMENT_MULTIPLIER
     }
   });
 
@@ -159,7 +133,6 @@ function generateSQL() {
   programOutput.reverse().forEach(function (value) {
     caseStatementPrograms += `when e.program_code = '${value.code}' then ${value.weight}\n`
   });
-  console.log(caseStatementPrograms);
 
   var sql = `
   select 
@@ -204,4 +177,43 @@ group by E.PATID, E.EPISODE_NUMBER, DIAGR.FACILITY, DIAGE.DiagnosisRecord, DIAGR
 
   document.getElementById("sqlOutput").value = sql;
 
+}
+
+function programListDragHandler(event) {
+  dragging = event.target;
+  event.dataTransfer.setData('text/html', dragging);
+}
+
+function programListDragOverHandler(event) {
+  event.preventDefault();
+  var bounding = event.target.getBoundingClientRect()
+  var offset = bounding.y + (bounding.height / 2);
+  if (event.clientY - offset > 0) {
+    event.target.style['border-bottom'] = 'solid 4px blue';
+    event.target.style['border-top'] = '';
+  } else {
+    event.target.style['border-top'] = 'solid 4px blue';
+    event.target.style['border-bottom'] = '';
+  }
+
+}
+
+function programListDragLeaveHandler(event) {
+  event.target.style['border-bottom'] = '';
+  event.target.style['border-top'] = '';
+
+}
+
+function programListDragDropHandler(event) {
+  event.preventDefault();
+  if (event.target.style['border-bottom'] !== '') {
+    event.target.style['border-bottom'] = '';
+    event.target.parentNode.insertBefore(dragging, event.target.nextSibling);
+  } else {
+    event.target.style['border-top'] = '';
+    event.target.parentNode.insertBefore(dragging, event.target);
+  }
+
+  // reindex list based on new order of items
+  reindexList();
 }

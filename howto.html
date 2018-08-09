@@ -1,46 +1,52 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 	<meta charset="utf-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<title>Avatar PPS Diagnosis Enhancement - Implementation Guide</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+	    crossorigin="anonymous">
 	<link rel="stylesheet" href="howto.css">
 </head>
+
 <body>
 
-   <div class="container">
+	<div class="container">
+		<div>Messages Section</div>
 		<div class="form-row">
 			<div class="col">
-				<label for="programCode">Program Code</label>
-				<input type="text" class="form-control" id="programCode" name="programCode"/>
+				<label for="program-code-inpt">Program Code</label>
+				<input type="text" class="form-control" id="program-code-inpt" name="program-code-inpt" />
 			</div>
 			<div class="col">
-				<label for="programValue">Program Value</label>
-				<input type="text"  class="form-control" id="programValue" name="programValue" />
+				<label for="program-value-inpt">Program Value</label>
+				<input type="text" class="form-control" id="program-value-inpt" name="program-value-inpt" />
 			</div>
 		</div>
 		<div class="row">
 			<div class="col">
-					<button class="btn btn-primary btn-sm" id="addProgram" name="addProgram">Add Program</button>
-					<button class="btn btn-danger btn-sm" id="clearProgram" name="clearProgram">Cancel Entry</button>			
-			</div>			
+				<button class="btn btn-primary btn-sm" id="add-program-btn" name="add-program-btn">Add Program</button>
+				<button class="btn btn-danger btn-sm" id="clear-program-btn" name="clear-program-btn">Cancel Entry</button>
+			</div>
 		</div>
 
 
-		<ul id="programList">
+		<ul id="program-list">
 		</ul>
 
 
 		<div id="sqlOutputArea">
-			<button class="btn btn-primary btn-sm" id="generateSQL" name="generateSQL">Generate SQL</button>
+			<button class="btn btn-primary btn-sm" id="generate-sql-btn" name="generate-sql-btn">Generate SQL</button>
 			<textarea class="form-control" id="sqlOutput">
 
 			</textarea>
 		</div>
 
 	</div>
-	<script src="howto.js"></script>	
+	<script src="https://unpkg.com/ionicons@4.3.0/dist/ionicons.js"></script>
+	<script src="howto.js"></script>
 </body>
+
 </html>
