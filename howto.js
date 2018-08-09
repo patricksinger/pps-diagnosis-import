@@ -2,6 +2,9 @@
 var programArray = [];
 var currentIndex = "";
 var dragging = null;
+var displayTimer = null;
+
+var clipboard = new ClipboardJS('.btn-copy');
 
 const RANK_INCREMENT_MULTIPLIER = 100;
 const MESSAGE_TIMEOUT = 5000;
@@ -22,10 +25,18 @@ function displayMessage(message, displayTime) {
   var messageCenter = document.getElementById("message-center");
   messageCenter.innerHTML = message;
   messageCenter.classList.remove("hidden");
-  setTimeout(function () {
-    messageCenter.classList.add("hidden");
-  }, displayTime)
+
+  // check if timer is already active to ensure message displays for full timeout
+  if (displayTimer != null) {
+    clearTimeout(displayTimer);
+    displayTimer = null;
+  } 
+  
+  displayTimer = setTimeout(function () {
+      messageCenter.classList.add("hidden");
+    }, displayTime)
 }
+
 
 // add / edit program to list
 function addProgramHandler() {
@@ -55,7 +66,6 @@ function updateProgramArray(code, value) {
       code,
       value
     });
-    console.log(programArray);
   }
 
   // clean up and re-render list
@@ -89,7 +99,6 @@ function renderProgramList() {
     listElementContent = document.createTextNode(`Priority : ${(index + 1)} - ${program.code} / ${program.value}`);
     listElement.appendChild(listElementContent);
 
-    // icon delete icon
     listElementDelete = document.createElement("ion-icon");
     listElementDelete.setAttribute("name", "trash");
     listElementDelete.setAttribute("target-element", index);
@@ -103,7 +112,7 @@ function renderProgramList() {
 
 function editProgramHandler(event) {
 
-  // TODO: load target item in to editor view
+  // load target item values in to field inputs
   currentIndex = event.target.getAttribute("id");
   document.getElementById("program-code-inpt").value = event.target.getAttribute("pcode");
   document.getElementById("program-value-inpt").value = event.target.getAttribute("pvalue");
@@ -125,7 +134,6 @@ function reindexList() {
     });
   };
 
-  // re-render list
   renderProgramList();
 }
 
@@ -136,9 +144,7 @@ function deleteElementHandler(event) {
 
 function generateSQLHandler() {
 
-  // TODO: check if program list has any elements
-  if (programArray.count < 1) {
-    // TODO: output to alert style component on page
+  if (programArray.length < 1) {
     displayMessage("No Programs Entered for SQL Statement", MESSAGE_TIMEOUT);
   } else {
 
@@ -155,8 +161,8 @@ function generateSQLHandler() {
       caseStatementPrograms += `when e.program_code = '${value.code}' then ${value.weight}\n`
     });
 
-    var sql = `
-  select 
+    // TODO: find better way to address this string / format
+    var sql = `select 
 pps.PATID,
 PPS.CUSTHAGO_UID as module_id,
 'E' as main_action,
@@ -196,10 +202,27 @@ where DIAGC.code_set_code = 'ICD10' and DIAGE.diagnosis_status_code = '1' and (D
 group by E.PATID, E.EPISODE_NUMBER, DIAGR.FACILITY, DIAGE.DiagnosisRecord, DIAGR.date_of_diagnosis, DIAGE.billing_order, DIAGC.diagnosis_code, DIAGC.diagnosis_value
 ) as diagnosis on pps.PATID = diagnosis.PATID`
 
-    document.getElementById("sqlOutput").value = sql;
+    document.getElementById("sql-output-text").value = sql;
   }
 }
 
+
+// clipboard handler functions
+clipboard.on("success", function(e) {
+  console.info('Action:', e.action);
+  console.info('Text:', e.text);
+  console.info('Trigger:', e.trigger);
+
+  e.clearSelection(); 
+  displayMessage("SQL Copied to Clipboard", 5000);
+});
+
+clipboard.on('error', function(e) {
+  console.error('Action:', e.action);
+  console.error('Trigger:', e.trigger);
+});
+
+// list drag and drop handler functions
 function programListDragHandler(event) {
   dragging = event.target;
   event.dataTransfer.setData('text/html', dragging);
@@ -235,6 +258,5 @@ function programListDragDropHandler(event) {
     event.target.parentNode.insertBefore(dragging, event.target);
   }
 
-  // reindex list based on new order of items
   reindexList();
 }
