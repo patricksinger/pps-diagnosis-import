@@ -4,6 +4,7 @@ var currentIndex = "";
 var dragging = null;
 
 const RANK_INCREMENT_MULTIPLIER = 100;
+const MESSAGE_TIMEOUT = 5000;
 
 // event handlers
 document.getElementById("add-program-btn").addEventListener("click", addProgramHandler);
@@ -16,6 +17,16 @@ document.getElementById("program-list").addEventListener('dragover', programList
 document.getElementById("program-list").addEventListener('dragleave', programListDragLeaveHandler);
 document.getElementById("program-list").addEventListener('drop', programListDragDropHandler);
 
+// message center display
+function displayMessage(message, displayTime) {
+  var messageCenter = document.getElementById("message-center");
+  messageCenter.innerHTML = message;
+  messageCenter.classList.remove("hidden");
+  setTimeout(function () {
+    messageCenter.classList.add("hidden");
+  }, displayTime)
+}
+
 // add / edit program to list
 function addProgramHandler() {
   const currentCode = document.getElementById("program-code-inpt").value;
@@ -24,8 +35,7 @@ function addProgramHandler() {
   if (currentCode) {
     updateProgramArray(currentCode, currentValue ? currentValue : currentCode);
   } else {
-    // TODO: output to alert style component on page
-    console.log("No Program Information Entered");
+    displayMessage("No Program Information Entered", MESSAGE_TIMEOUT);
   }
 }
 
@@ -38,8 +48,7 @@ function updateProgramArray(code, value) {
     currentIndex = "";
   } else if (programArray.filter(program => program.code === code || program.value === value).length > 0) {
     // code or value already present in list
-    // TODO: output to alert style component on page
-    console.log("Program Code or Value Already Entered in List");
+    displayMessage("Program Code or Value Already Entered in List", MESSAGE_TIMEOUT);
   } else {
     // add to list
     programArray.push({
@@ -82,8 +91,10 @@ function renderProgramList() {
 
     // icon delete icon
     listElementDelete = document.createElement("ion-icon");
-    listElementDelete.setAttribute("name", "heart");
-    
+    listElementDelete.setAttribute("name", "trash");
+    listElementDelete.setAttribute("target-element", index);
+    listElement.addEventListener("click", deleteElementHandler);
+
     listElement.appendChild(listElementDelete);
 
     programList.appendChild(listElement);
@@ -118,23 +129,33 @@ function reindexList() {
   renderProgramList();
 }
 
+function deleteElementHandler(event) {
+  programArray.splice(event.target.getAttribute("target-element"), 1);
+  renderProgramList();
+}
 
 function generateSQLHandler() {
 
-  var programOutput = programArray.reverse().map(function (program, index) {
-    return {
-      code: program.code,
-      value: program.value,
-      weight: (index * RANK_INCREMENT_MULTIPLIER) + RANK_INCREMENT_MULTIPLIER
-    }
-  });
+  // TODO: check if program list has any elements
+  if (programArray.count < 1) {
+    // TODO: output to alert style component on page
+    displayMessage("No Programs Entered for SQL Statement", MESSAGE_TIMEOUT);
+  } else {
 
-  var caseStatementPrograms = "";
-  programOutput.reverse().forEach(function (value) {
-    caseStatementPrograms += `when e.program_code = '${value.code}' then ${value.weight}\n`
-  });
+    var programOutput = programArray.reverse().map(function (program, index) {
+      return {
+        code: program.code,
+        value: program.value,
+        weight: (index * RANK_INCREMENT_MULTIPLIER) + RANK_INCREMENT_MULTIPLIER
+      }
+    });
 
-  var sql = `
+    var caseStatementPrograms = "";
+    programOutput.reverse().forEach(function (value) {
+      caseStatementPrograms += `when e.program_code = '${value.code}' then ${value.weight}\n`
+    });
+
+    var sql = `
   select 
 pps.PATID,
 PPS.CUSTHAGO_UID as module_id,
@@ -175,8 +196,8 @@ where DIAGC.code_set_code = 'ICD10' and DIAGE.diagnosis_status_code = '1' and (D
 group by E.PATID, E.EPISODE_NUMBER, DIAGR.FACILITY, DIAGE.DiagnosisRecord, DIAGR.date_of_diagnosis, DIAGE.billing_order, DIAGC.diagnosis_code, DIAGC.diagnosis_value
 ) as diagnosis on pps.PATID = diagnosis.PATID`
 
-  document.getElementById("sqlOutput").value = sql;
-
+    document.getElementById("sqlOutput").value = sql;
+  }
 }
 
 function programListDragHandler(event) {
