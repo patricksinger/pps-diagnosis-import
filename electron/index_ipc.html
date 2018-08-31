@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Hello World</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+</head>
+<body>
+	<h1>Hello World!</h1>
+	We are using node <script>document.write(process.versions.node)</script>,
+	Chrome <script>document.write(process.versions.chrome)</script>,
+	and Electron <script>document.write(process.versions.electron)</script>.
+
+	<button id='openFile'>Open File</button>
+
+	<script>
+		document.getElementById('openFile').addEventListener('click', () => {
+			const {ipcRenderer} = require('electron');
+			ipcRenderer.send('openTargetFile', () => {
+				console.log('event sent');
+			});
+		});
+
+	</script>
+  </body>
+</body>
+</html>
