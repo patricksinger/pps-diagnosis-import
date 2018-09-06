@@ -1,5 +1,6 @@
 const electron = require('electron');
 const {app, BrowserWindow} = require('electron');
+const {dialog} = require('electron');
 
 const {ipcMain} = require('electron');
 
@@ -18,7 +19,6 @@ function createWindow() {
 }
 
 ipcMain.on('openTargetFile', (event, path) => {
-	const {dialog} = require('electron');
 	const fs = require('fs');
 	dialog.showOpenDialog(function(fileNames) {
 		if (fileNames === undefined) {

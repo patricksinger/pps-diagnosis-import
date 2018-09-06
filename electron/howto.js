@@ -20,6 +20,8 @@ document.getElementById("program-list").addEventListener('dragover', programList
 document.getElementById("program-list").addEventListener('dragleave', programListDragLeaveHandler);
 document.getElementById("program-list").addEventListener('drop', programListDragDropHandler);
 
+document.getElementById('select-csv-btn').addEventListener("click", selectCSVFileHandler);
+
 // message center display
 function displayMessage(message, displayTime) {
   var messageCenter = document.getElementById("message-center");
@@ -204,6 +206,19 @@ group by E.PATID, E.EPISODE_NUMBER, DIAGR.FACILITY, DIAGE.DiagnosisRecord, DIAGR
 
     document.getElementById("sql-output-text").value = sql;
   }
+}
+
+
+function selectCSVFileHandler() {
+    const remote = require('electron').remote;
+    const dialog = remote.dialog;
+    dialog.showOpenDialog(function(fileNames) {
+      if (fileNames === undefined) {
+        console.log('no file selected');
+      } else {
+        document.getElementById("csv-file-path").value = fileNames[0];
+      }
+    });
 }
 
 

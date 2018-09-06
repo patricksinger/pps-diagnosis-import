@@ -15,40 +15,61 @@
 
 	<div class="container">
 		<div id="message-center" class="alert alert-primary hidden"></div>
-		<div class="form-row">
-			<div class="col">
-				<label for="program-code-inpt">Program Code</label>
-				<input type="text" class="form-control" id="program-code-inpt" name="program-code-inpt" />
+
+		<div id="generate-sql">
+			<div class="form-row">
+				<div class="col">
+					<label for="program-code-inpt">Program Code</label>
+					<input type="text" class="form-control" id="program-code-inpt" name="program-code-inpt" />
+				</div>
+				<div class="col">
+					<label for="program-value-inpt">Program Value</label>
+					<input type="text" class="form-control" id="program-value-inpt" name="program-value-inpt" />
+				</div>
 			</div>
-			<div class="col">
-				<label for="program-value-inpt">Program Value</label>
-				<input type="text" class="form-control" id="program-value-inpt" name="program-value-inpt" />
+			<div class="row">
+				<div class="col">
+					<button class="btn btn-primary btn-sm" id="add-program-btn" name="add-program-btn">Add Program</button>
+					<button class="btn btn-danger btn-sm" id="clear-program-btn" name="clear-program-btn">Cancel Entry</button>
+				</div>
+			</div>
+
+
+			<ul id="program-list">
+			</ul>
+
+
+			<div id="sql-output-area">
+				<button class="btn btn-primary btn-sm" id="generate-sql-btn" name="generate-sql-btn">Generate SQL</button>
+				<button class="btn btn-primary btn-sm btn-copy" id="copy-sql-btn" name="cop-sql-btn" data-clipboard-target="#sql-output-text">Copy SQL to Clipboard</button>
+				<textarea class="form-control" id="sql-output-text">
+
+				</textarea>
 			</div>
 		</div>
-		<div class="row">
-			<div class="col">
-				<button class="btn btn-primary btn-sm" id="add-program-btn" name="add-program-btn">Add Program</button>
-				<button class="btn btn-danger btn-sm" id="clear-program-btn" name="clear-program-btn">Cancel Entry</button>
+
+
+		<div id="generate-csv-xml">
+
+			<div id="row">
+				<input type="text" id="csv-file-path" readonly><button class="btn btn-primary btn-sm" id="select-csv-btn" name="select-csv-btn">Select CSV File</button>
 			</div>
-		</div>
 
-
-		<ul id="program-list">
-		</ul>
-
-
-		<div id="sql-output-area">
-			<button class="btn btn-primary btn-sm" id="generate-sql-btn" name="generate-sql-btn">Generate SQL</button>
-			<button class="btn btn-primary btn-sm btn-copy" id="copy-sql-btn" name="cop-sql-btn" data-clipboard-target="#sql-output-text">Copy SQL to Clipboard</button>
-			<textarea class="form-control" id="sql-output-text">
-
-			</textarea>
 		</div>
 
 	</div>
 	<script src="https://unpkg.com/ionicons@4.3.0/dist/ionicons.js"></script>
 	<script src="https://unpkg.com/clipboard@2.0.0/dist/clipboard.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.12/handlebars.min.js"></script>
 	<script src="howto.js"></script>
+
+
+	<!-- handlebar templates -->
+	<script id="sql-builder-template" type="text/x-handlebars-template">
+
+	
+	</script>	
+
 </body>
 
 </html>
