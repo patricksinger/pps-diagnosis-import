@@ -1,9 +1,15 @@
 const electron = require('electron');
 const { app, BrowserWindow, Menu } = require('electron');
+const path = require("path");
+const Store = require('electron-store');
+
+app.setPath("userData", path.join(__dirname, "AppData"));
+const settings = new Store({cwd:"./"});
 
 let mainWindow;
+let settingsWindow;
 
-function createWindow() {
+function createMainWindow() {
 	mainWindow = new BrowserWindow({width: 800, height: 600});
 	mainWindow.loadFile('howto.html');
 	createMenu();
@@ -32,9 +38,10 @@ function createMenu() {
 }
 
 function createSettingsWindow() {
-	let settingsWindow = new BrowserWindow({ width: 400, height: 400, alwaysOnTop: true });
+	settingsWindow = new BrowserWindow({ parent: mainWindow, modal: true, width: 400, height: 400, skipTaskbar : true, resizable: false});
 	settingsWindow.on("close", function () { settingsWindow = null });
 	settingsWindow.loadFile("settings.html");
+	settingsWindow.setMenu(null);
 	settingsWindow.show();
 }
 
@@ -46,8 +53,8 @@ app.on('window-all-closed', () => {
 
 app.on('activate', () => {
 	if (mainWindow === null) {
-		createWindow();
+		createMainWindow();
 	}
 });
 
-app.on('ready', createWindow);
+app.on('ready', createMainWindow);

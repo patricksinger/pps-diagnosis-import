@@ -6,8 +6,7 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<title>PPS Diagnosis Enhancement - Implementation Guide</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
-	    crossorigin="anonymous">
+	<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
 	<link rel="stylesheet" href="css/howto.css">
 </head>
 
@@ -16,56 +15,102 @@
 	<div class="container">
 		<div id="message-center" class="alert alert-primary hidden"></div>
 
-		<div id="generate-sql">
-			<div class="form-row">
-				<div class="col">
-					<label for="program-code-inpt">Program Code</label>
-					<input type="text" class="form-control" id="program-code-inpt" name="program-code-inpt" />
-				</div>
-				<div class="col">
-					<label for="program-value-inpt">Program Value</label>
-					<input type="text" class="form-control" id="program-value-inpt" name="program-value-inpt" />
-				</div>
-			</div>
-			<div class="row">
-				<div class="col">
-					<button class="btn btn-primary btn-sm" id="add-program-btn" name="add-program-btn">Add Program</button>
-					<button class="btn btn-danger btn-sm" id="clear-program-btn" name="clear-program-btn">Cancel Entry</button>
-				</div>
-			</div>
-
-
-			<ul id="program-list">
-			</ul>
-
-
-			<div id="sql-output-area">
-				<button class="btn btn-primary btn-sm" id="generate-sql-btn" name="generate-sql-btn">Generate SQL</button>
-				<button class="btn btn-primary btn-sm btn-copy" id="copy-sql-btn" name="cop-sql-btn" data-clipboard-target="#sql-output-text">Copy SQL to Clipboard</button>
-				<textarea class="form-control" id="sql-output-text">
-
-				</textarea>
-			</div>
+		<div>
+			PPS Diagnosis Importation Tool
 		</div>
 
+		<div class="accordion" id="pps-steps-accordion">
+				<div class="card">
+						<div class="card-header" id="generate-sql-header">
+						  <h5 class="mb-0">
+							<button class="btn btn-link" type="button" data-toggle="collapse" data-target="#generate-sql-step" aria-expanded="true" aria-controls="generate-sql-step">
+							  Step - Generate Diagnosis SQL Statement
+							</button>
+						  </h5>
+						</div>
+						<div id="generate-sql-step" class="collapse show" aria-labelledby="generate-sql-step" data-parent="#pps-steps-accordion">
+								<div class="card-body">
 
-		<div id="generate-csv-xml">
+										<div id="generate-sql">
+												<div class="form-row">
+													<div class="col">
+														<label for="program-code-inpt">Program Code</label>
+														<input type="text" class="form-control form-control-sm" id="program-code-inpt" name="program-code-inpt" />
+													</div>
+													<div class="col">
+														<label for="program-value-inpt">Program Value</label>
+														<input type="text" class="form-control form-control-sm" id="program-value-inpt" name="program-value-inpt" />
+													</div>
+												</div>
+												<div class="row">
+													<div class="col">
+														<button class="btn btn-primary btn-sm" id="add-program-btn" name="add-program-btn">Add Program</button>
+														<button class="btn btn-danger btn-sm" id="clear-program-btn" name="clear-program-btn">Cancel Entry</button>
+													</div>
+												</div>
+									
+									
+												<ul id="program-list">
+												</ul>
+									
+									
+												<div id="sql-output-area">
+													<button class="btn btn-primary btn-sm" id="generate-sql-btn" name="generate-sql-btn">Generate SQL</button>
+													<button class="btn btn-primary btn-sm btn-copy" id="copy-sql-btn" name="cop-sql-btn" data-clipboard-target="#sql-output-text">Copy SQL to Clipboard</button>
+													<textarea class="form-control" id="sql-output-text">
+									
+													</textarea>
+												</div>
+											</div>
+								</div>
+							  </div>
+							</div>		
+							<div class="card">
+									<div class="card-header" id="generate-csv-header">
+									  <h5 class="mb-0">
+										<button class="btn btn-link" type="button" data-toggle="collapse" data-target="#generate-csv-step" aria-expanded="true" aria-controls="generate-csv-step">
+										  Step - Generate CSV / XML File
+										</button>
+									  </h5>
+									</div>
+									<div id="generate-csv-step" class="collapse show" aria-labelledby="generate-csv-step" data-parent="#pps-steps-accordion">
+											<div class="card-body">
+			
+													<div id="generate-csv-xml">
 
-			<div id="row">
-				<input type="text" id="csv-file-path" readonly><button class="btn btn-primary btn-sm" id="select-csv-btn" name="select-csv-btn">Select CSV File</button>
-			</div>
-			<! -- add ouput path and file name selectors -->
-
-			<div id="row">
-				<button class="btn btn-primary btn-sm" id="generate-import-btn" name="generate-import-btn">Generate Import File</button>
-			</div>
-
+															<div id="row">
+																<input type="text" id="csv-file-path" readonly><button class="btn btn-primary btn-sm" id="select-csv-btn" name="select-csv-btn">Select CSV File</button>
+															</div>
+															<! -- add ouput path and file name selectors -->
+												
+															<div id="row">
+																<button class="btn btn-primary btn-sm" id="generate-import-btn" name="generate-import-btn">Generate Import File</button>
+															</div>
+														</div>
+												
+											</div>
+										  </div>
+										</div>												
 		</div>
+
 
 	</div>
+	
 	<script src="https://unpkg.com/ionicons@4.3.0/dist/ionicons.js"></script>
 	<script src="https://unpkg.com/clipboard@2.0.0/dist/clipboard.min.js"></script>
 	<script src="js/howto.js"></script>
+
+	<!-- jquery global fix for electron -->
+	<script>
+		window.jQuery = window.$ = require('jquery');
+	</script>
+	<!-- <script src="../node_modules/jquery/dist/jquery.js"></script> -->
+	<script src="node_modules/popper.js/dist/umd/popper.js"></script>
+	<script src="node_modules/bootstrap/dist/js/bootstrap.js"></script>	
+
+	<script>
+		$("#pps-steps-accordion").collapse('hide');
+	</script>
 
 </body>
 

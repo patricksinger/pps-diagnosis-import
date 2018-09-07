@@ -88,6 +88,7 @@ function renderProgramList() {
   var listElement;
   var listElementContent;
   var listElementDelete;
+  var listElementEdit;
   var programList = document.getElementById("program-list");
 
   programList.innerHTML = '';
@@ -103,10 +104,18 @@ function renderProgramList() {
     listElementContent = document.createTextNode(`Priority : ${(index + 1)} - ${program.code} / ${program.value}`);
     listElement.appendChild(listElementContent);
 
+    listElementEdit = document.createElement("ion-icon");
+    listElementEdit.setAttribute("name", "create");
+    listElementEdit.setAttribute("target-element", index);
+    listElementEdit.addEventListener("click", editProgramHandler);
+
+    listElement.appendChild(listElementEdit);
+
+
     listElementDelete = document.createElement("ion-icon");
     listElementDelete.setAttribute("name", "trash");
     listElementDelete.setAttribute("target-element", index);
-    listElement.addEventListener("click", deleteElementHandler);
+    listElementDelete.addEventListener("click", deleteElementHandler);
 
     listElement.appendChild(listElementDelete);
 
@@ -116,10 +125,14 @@ function renderProgramList() {
 
 function editProgramHandler(event) {
 
+  console.log(programArray);
+  console.log(event.target.getAttribute("target-element"));
+
+
   // load target item values in to field inputs
   currentIndex = event.target.getAttribute("id");
-  document.getElementById("program-code-inpt").value = event.target.getAttribute("pcode");
-  document.getElementById("program-value-inpt").value = event.target.getAttribute("pvalue");
+  document.getElementById("program-code-inpt").value = programArray[event.target.getAttribute("target-element")].code;
+  document.getElementById("program-value-inpt").value = programArray[event.target.getAttribute("target-element")].value;
   document.getElementById("add-program-btn").innerHTML = "Update Value";
 
 }
@@ -202,7 +215,7 @@ from (
 left outer join client_diagnosis_record as DIAGR ON E.PATID = DIAGR.PATID and E.FACILITY = DIAGR.FACILITY and DIAGR.EPISODE_NUMBER = E.EPISODE_NUMBER
 left outer join client_diagnosis_entry as DIAGE ON DIAGE.DiagnosisRecord = DIAGR.ID AND DIAGE.PATID = DIAGR.PATID AND DIAGE.FACILITY = DIAGR.FACILITY
 left outer join client_diagnosis_codes AS DIAGC ON DIAGE.ID = DIAGC.DiagnosisEntry AND DIAGE.PATID = DIAGC.PATID AND DIAGE.FACILITY = DIAGC.FACILITY
-where DIAGC.code_set_code = 'ICD10' and DIAGE.diagnosis_status_code = '1' and (DIAGE.classification_code in ('4','7') or DIAGE.classification_code IS NULL) and DIAGE.billing_order = 1
+where E.PATID = '1' and DIAGC.code_set_code = 'ICD10' and DIAGE.diagnosis_status_code = '1' and (DIAGE.classification_code in ('4','7') or DIAGE.classification_code IS NULL) and DIAGE.billing_order = 1
 group by E.PATID, E.EPISODE_NUMBER, DIAGR.FACILITY, DIAGE.DiagnosisRecord, DIAGR.date_of_diagnosis, DIAGE.billing_order, DIAGC.diagnosis_code, DIAGC.diagnosis_value
 ) as diagnosis on pps.PATID = diagnosis.PATID`
 

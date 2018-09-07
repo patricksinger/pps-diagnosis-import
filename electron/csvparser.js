@@ -3,11 +3,15 @@ const jsonxml = require("jsontoxml");
 const fs = require("fs");
 const stringutils = require("./stringutils");
 
+const Store = require('electron-store');
+const settings = new Store({cwd:"./"});
+
+
 function parseCSV(csvFile) {
 	csvParser()
 		.fromFile(csvFile)
 		.then((jsonOutput) => {
-			createExportXML(jsonOutput);
+			createExportXML(jsonOutput, settings);
 		});
 }
 
@@ -15,7 +19,7 @@ function createExportXML(json) {
 
 	let xmlExport = {
 		option: {
-			optionidentifier: "ENTERSETTING_VAR",
+			optionidentifier: settings.get("OPTION_ID"),
 			optiondataplaceholder: []
 		}
 	}
@@ -98,7 +102,7 @@ function createExportXML(json) {
 	output = stringutils.replaceAll(output, "</optiondataplaceholder>", "");
 	output = stringutils.replaceAll(output, "<spcplaceholder>", "");
 	output = stringutils.replaceAll(output, "</spcplaceholder>", "");
-	output = stringutils.replaceAll(output, "maintable", "ENTERSETTING_VAR");
+	output = stringutils.replaceAll(output, "maintable", settings.get("MAIN_TABLE"));
 
 	// output to file
 	// @TODO add to settings for output location and fiilename

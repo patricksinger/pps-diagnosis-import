@@ -15,14 +15,6 @@ li {
 	border-bottom: solid 1px gray;
 }
 
-#sql-output-area {
-	margin-top: 50px;
-}
-
-#generate-csv-xml {
-	margin-top: 100px;
-}
-
 .hidden {
 	display: none;
 }
