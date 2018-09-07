@@ -8,7 +8,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
 	    crossorigin="anonymous">
-	<link rel="stylesheet" href="howto.css">
+	<link rel="stylesheet" href="css/howto.css">
 </head>
 
 <body>
@@ -54,21 +54,18 @@
 			<div id="row">
 				<input type="text" id="csv-file-path" readonly><button class="btn btn-primary btn-sm" id="select-csv-btn" name="select-csv-btn">Select CSV File</button>
 			</div>
+			<! -- add ouput path and file name selectors -->
+
+			<div id="row">
+				<button class="btn btn-primary btn-sm" id="generate-import-btn" name="generate-import-btn">Generate Import File</button>
+			</div>
 
 		</div>
 
 	</div>
 	<script src="https://unpkg.com/ionicons@4.3.0/dist/ionicons.js"></script>
 	<script src="https://unpkg.com/clipboard@2.0.0/dist/clipboard.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.12/handlebars.min.js"></script>
-	<script src="howto.js"></script>
-
-
-	<!-- handlebar templates -->
-	<script id="sql-builder-template" type="text/x-handlebars-template">
-
-	
-	</script>	
+	<script src="js/howto.js"></script>
 
 </body>
 
