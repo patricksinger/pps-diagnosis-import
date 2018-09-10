@@ -14,7 +14,7 @@ function createMainWindow() {
 	mainWindow.loadFile('howto.html');
 	createMenu();
 
-	mainWindow.webContents.openDevTools();
+	//mainWindow.webContents.openDevTools();
 
 	mainWindow.on('closed', () => {
 		mainWindow = null;

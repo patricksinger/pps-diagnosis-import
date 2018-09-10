@@ -21,6 +21,7 @@ document.getElementById("program-list").addEventListener('dragleave', programLis
 document.getElementById("program-list").addEventListener('drop', programListDragDropHandler);
 
 document.getElementById('select-csv-btn').addEventListener("click", selectCSVFileHandler);
+document.getElementById('select-xml-btn').addEventListener("click", selectXMLFileHandler);
 document.getElementById('generate-import-btn').addEventListener("click", generateImportHandler);
 
 
@@ -235,10 +236,24 @@ function selectCSVFileHandler() {
     });
 }
 
+function selectXMLFileHandler() {
+  const remote = require("electron").remote;
+  const dialog = remote.dialog;
+  // get window from main process to make modal
+  const exportLocation = dialog.showSaveDialog();
+  if (exportLocation === undefined) {
+    console.log("no file selected")
+  } else {
+    document.getElementById("xml-file-path").value = exportLocation;
+  }
+
+}
+
 function generateImportHandler() {
   const remote = require("electron").remote;
   const csvParser = remote.require('./csvparser');
-  csvParser.parseCSV(document.getElementById("csv-file-path").value);
+  // @TODO error check if no files given
+  csvParser.parseCSV(document.getElementById("csv-file-path").value, document.getElementById("xml-file-path").value);
 }
 
 

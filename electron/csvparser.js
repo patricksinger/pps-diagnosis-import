@@ -7,15 +7,15 @@ const Store = require('electron-store');
 const settings = new Store({cwd:"./"});
 
 
-function parseCSV(csvFile) {
+function parseCSV(csvFile, xmlFile) {
 	csvParser()
 		.fromFile(csvFile)
 		.then((jsonOutput) => {
-			createExportXML(jsonOutput, settings);
+			createExportXML(jsonOutput, xmlFile, settings);
 		});
 }
 
-function createExportXML(json) {
+function createExportXML(json, xmlFile, settings) {
 
 	let xmlExport = {
 		option: {
@@ -106,7 +106,7 @@ function createExportXML(json) {
 
 	// output to file
 	// @TODO add to settings for output location and fiilename
-	fs.writeFileSync('import.xml', output);
+	fs.writeFileSync(xmlFile, output);
 	console.log("Export File Completed.")
 }
 
