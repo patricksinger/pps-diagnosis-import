@@ -18,3 +18,7 @@ li {
 .hidden {
 	display: none;
 }
+
+#sql-output-area {
+	margin-top : 25px
+}
