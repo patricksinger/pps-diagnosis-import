@@ -7,7 +7,6 @@ var displayTimer = null;
 var clipboard = new ClipboardJS('.btn-copy');
 
 const RANK_INCREMENT_MULTIPLIER = 100;
-const MESSAGE_TIMEOUT = 5000;
 
 // event handlers
 document.getElementById("add-program-btn").addEventListener("click", addProgramHandler);
@@ -24,25 +23,6 @@ document.getElementById('select-csv-btn').addEventListener("click", selectCSVFil
 document.getElementById('select-xml-btn').addEventListener("click", selectXMLFileHandler);
 document.getElementById('generate-import-btn').addEventListener("click", generateImportHandler);
 
-
-// message center display
-function displayMessage(message, displayTime) {
-  var messageCenter = document.getElementById("message-center");
-  messageCenter.innerHTML = message;
-  messageCenter.classList.remove("hidden");
-
-  // check if timer is already active to ensure message displays for full timeout
-  if (displayTimer != null) {
-    clearTimeout(displayTimer);
-    displayTimer = null;
-  } 
-  
-  displayTimer = setTimeout(function () {
-      messageCenter.classList.add("hidden");
-    }, displayTime)
-}
-
-
 // add / edit program to list
 function addProgramHandler() {
   const currentCode = document.getElementById("program-code-inpt").value;
@@ -51,7 +31,7 @@ function addProgramHandler() {
   if (currentCode) {
     updateProgramArray(currentCode, currentValue ? currentValue : currentCode);
   } else {
-    displayMessage("No Program Information Entered", MESSAGE_TIMEOUT);
+    displayMessage("message-center", "No Program Information Entered");
   }
 }
 
@@ -64,7 +44,7 @@ function updateProgramArray(code, value) {
     currentIndex = "";
   } else if (programArray.filter(program => program.code === code || program.value === value).length > 0) {
     // code or value already present in list
-    displayMessage("Program Code or Value Already Entered in List", MESSAGE_TIMEOUT);
+    displayMessage("message-center", "Program Code or Value Already Entered in List");
   } else {
     // add to list
     programArray.push({
@@ -163,7 +143,7 @@ function deleteElementHandler(event) {
 function generateSQLHandler() {
 
   if (programArray.length < 1) {
-    displayMessage("No Programs Entered for SQL Statement", MESSAGE_TIMEOUT);
+    displayMessage("message-center", "No Programs Entered for SQL Statement");
   } else {
 
     var programOutput = programArray.reverse().map(function (program, index) {
@@ -264,7 +244,7 @@ clipboard.on("success", function(e) {
   console.info('Trigger:', e.trigger);
 
   e.clearSelection(); 
-  displayMessage("SQL Copied to Clipboard", 5000);
+  displayMessage("message-center", "SQL Copied to Clipboard");
 });
 
 clipboard.on('error', function(e) {

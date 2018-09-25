@@ -9,12 +9,21 @@ const settings = new Store({cwd:"./"});
 let mainWindow;
 let settingsWindow;
 
+function launchWindows() {
+	createMainWindow();
+
+	// @TODO check if settings are blank and launch settings window to prompt entry
+	// if (!settings.get("OPTION_ID") || !settings.get("MAIN_TABLE") || !settings.get("SPC_TABLE")) {
+	// 	createSettingsWindow();
+	// }	
+}
+
 function createMainWindow() {
 	mainWindow = new BrowserWindow({width: 800, height: 600});
 	mainWindow.loadFile('howto.html');
 	createMenu();
 
-	//mainWindow.webContents.openDevTools();
+	mainWindow.webContents.openDevTools();
 
 	mainWindow.on('closed', () => {
 		mainWindow = null;
@@ -57,4 +66,4 @@ app.on('activate', () => {
 	}
 });
 
-app.on('ready', createMainWindow);
+app.on('ready', launchWindows);
