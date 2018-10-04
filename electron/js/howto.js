@@ -191,7 +191,6 @@ from (
 		) as ranking 
 		where program_ranking > 0 and totaldx > 0	
 	) as e
-	inner join (select PATID, MAX(total_rank) as max_rank from view_pps_mh_ranking group by PATID) as maxrank ON e.PATID = maxrank.PATID and e.total_rank = maxrank.max_rank
 ) as E
 left outer join client_diagnosis_record as DIAGR ON E.PATID = DIAGR.PATID and E.FACILITY = DIAGR.FACILITY and DIAGR.EPISODE_NUMBER = E.EPISODE_NUMBER
 left outer join client_diagnosis_entry as DIAGE ON DIAGE.DiagnosisRecord = DIAGR.ID AND DIAGE.PATID = DIAGR.PATID AND DIAGE.FACILITY = DIAGR.FACILITY
