@@ -30,6 +30,8 @@ function createExportXML(json, xmlFile, settings) {
 
 	json.forEach((element) => {
 
+		if (element.primary_diagnosis) {
+
 		if (currentClient !== element.PATID) {
 			currentClient = element.PATID;
 			currentMainModule = element.module_id;
@@ -51,28 +53,28 @@ function createExportXML(json, xmlFile, settings) {
 				}
 			}
 
-		} else {
-			if (currentMainModule !== element.module_id) {
-				currentModule = element.module_id;
+		} 
+		if (currentMainModule !== element.module_id) {
+			currentMainModule = element.module_id;
 
-				if (optionItem) {
-					xmlExport.option.optiondataplaceholder.push(optionItem);
-				}
+			if (optionItem) {
+				xmlExport.option.optiondataplaceholder.push(optionItem);
+			}
 
-				optionItem = {
-					optiondata: {
-						PATID: element.PATID,
-						maintable: {
-							"rows.reference": {
-								unique_identifier: element.module_id,
-								add_edit_delete: "E"
-							},
-							principal_diagnosis_code: element.primary_diagnosis
-						}
+			optionItem = {
+				optiondata: {
+					PATID: element.PATID,
+					maintable: {
+						"rows.reference": {
+							unique_identifier: element.module_id,
+							add_edit_delete: "E"
+						},
+						principal_diagnosis_code: element.primary_diagnosis
 					}
 				}
 			}
 		}
+		
 		// add MI SPC values
 		if (element.spc_id) {
 			if (!("spcplaceholder" in optionItem.optiondata.maintable)) {
@@ -88,6 +90,7 @@ function createExportXML(json, xmlFile, settings) {
 				}
 			});
 		}
+		} // block to check if diagnosis available
 	});
 
 	if (optionItem) {
