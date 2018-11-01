@@ -6,33 +6,40 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Settings</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
-        crossorigin="anonymous">
-        <link rel="stylesheet" href="css/howto.css">
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
     <div class="container">
-        <div class="row"><div id="message-center-settings" class="alert alert-primary hidden"></div></div>
+        <div id="message-center-settings" class="alert alert-primary hidden"></div>
         <div class="row">
-            <label for="option-id-inpt">PPS Module Option ID</label>
-            <input type="text" id="option-id-inpt">
-        </div>
-        <div class="row">
-            <label for="main-table-inpt">PPS Main Table Name</label>
-            <input type="text" id="main-table-inpt">
-        </div>
-        <div class="row">
-            <label for="spc-table-inpt">PPS SPC Table Name</label>
-            <input type="text" id="spc-table-inpt">
-        </div>
-        <div class="row">
-            <button id="settings-save-btn">Save and Exit</button>
-            <button id="settings-exit-btn">Exit</button>
+                <div class="col">
+                    <div class="row row-settings">
+                        <div class="col"><label class="form-check-label" for="option-id-inpt">PPS Module Option ID</label></div>
+                        <div class="col-auto"><input class="form-control form-control-sm settings-input" type="text" id="option-id-inpt" placeholder="Use Form and Table Documentation to get ID" aria-label="Recipient's username"></div>
+                    </div>
+                    <div class="row row-settings">
+                            <div class="col"><label class="form-check-label" for="main-table-inpt">PPS Main Table Name</label></div>
+                            <div class="col-auto"><input class="form-control form-control-sm settings-input" type="text" id="main-table-inpt"></div>
+                    </div>
+                    <div class="row row-settings">
+                            <div class="col"><label class="form-check-label" for="spc-table-inpt">PPS SPC Table Name</label></div>
+                                <div class="col-auto"><input class="form-control form-control-sm settings-input" type="text" id="spc-table-inpt"></div>
+                    </div>
+                    <div class="row row-settings">
+                            <div class="col-auto"><label class="form-check-label" for="open-pps-chck">Include Only Open PPS Episodes</label></div>
+                            <div class="col"><input class="form-check-input" type="checkbox" id="open-pps-chck"></div>
+                    </div>                
+                    <div class="row text-center">
+                        <div class="col"><button class="btn btn-dark btn-sm" id="settings-save-btn">Save</button></div>
+                        <div class="col"><button class="btn btn-secondary btn-sm" id="settings-exit-btn">Cancel</button></div>
+                    </div>
+                </div>  
         </div>
     </div>
 
-    <script scrc="js/utils.js"></script>
+    <script src="js/utils.js"></script>
     <script src="js/settings.js"></script>
 
 </body>

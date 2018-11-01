@@ -15,8 +15,20 @@ li {
 	border-bottom: solid 1px gray;
 }
 
+.row-settings {
+	padding-bottom: 1rem;
+}
+
 .hidden {
 	display: none;
+}
+
+.centered {
+	text-align: center;
+}
+
+.settings-input {
+	width: 20rem;
 }
 
 #sql-output-area {

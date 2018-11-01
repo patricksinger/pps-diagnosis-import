@@ -10,8 +10,7 @@ function loadSettingsHandler() {
     document.getElementById("option-id-inpt").value = settings.get("OPTION_ID") === undefined ? "" : settings.get("OPTION_ID");
     document.getElementById("main-table-inpt").value = settings.get("MAIN_TABLE") === undefined ? "" : settings.get("MAIN_TABLE");
     document.getElementById("spc-table-inpt").value = settings.get("SPC_TABLE") === undefined  ? "" : settings.get("SPC_TABLE");
-
-    // @TODO first time settings check and prompt
+    document.getElementById("open-pps-chck").checked = settings.get("OPEN_PPS_ONLY") === undefined ? "" : settings.get("OPEN_PPS_ONLY");
 }
 
 function settingsSaveHandler() {
@@ -23,6 +22,7 @@ function settingsSaveHandler() {
         settings.set("OPTION_ID", document.getElementById("option-id-inpt").value);
         settings.set("MAIN_TABLE", document.getElementById("main-table-inpt").value);
         settings.set("SPC_TABLE", document.getElementById("spc-table-inpt").value);
+        settings.set("OPEN_PPS_ONLY", document.getElementById("open-pps-chck").checked);
         settingsExitHandler();
     }
 }

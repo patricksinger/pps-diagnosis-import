@@ -2,11 +2,15 @@
 var programArray = [];
 var currentIndex = "";
 var dragging = null;
-var displayTimer = null;
 
 var clipboard = new ClipboardJS('.btn-copy');
 
 const RANK_INCREMENT_MULTIPLIER = 10000;
+
+// global variables for scope
+const Store = require('electron-store');
+const settings = new Store({cwd:"./"});
+
 
 // event handlers
 document.getElementById("add-program-btn").addEventListener("click", addProgramHandler);
@@ -169,6 +173,8 @@ function generateSQLHandler() {
       caseStatementPrograms += `when e.program_code = '${value.code}' then ${value.weight}\n`
     });
 
+    const openEpisodesOnly = settings.get("OPEN_PPS_ONLY") === true ? "WHERE pps.episode_end_date IS NULL" : "";
+
     // TODO: find better way to address this string / format
     var sql = `select 
     pps.PATID,
@@ -229,7 +235,8 @@ function generateSQLHandler() {
     spc. CUSTHAGQ_UID as spc_id,
     'E' as spc_action
     from user_pps_mh_NonEpisodic as pps
-    left outer join user_pps_mh_spc as spc on spc.PATID = pps.PATID and spc.CUSTHAGO_UID = pps.CUSTHAGO_UID`
+    left outer join user_pps_mh_spc as spc on spc.PATID = pps.PATID and spc.CUSTHAGO_UID = pps.CUSTHAGO_UID
+    ${openEpisodesOnly}`
 
     document.getElementById("sql-output-text").value = sql;
   }

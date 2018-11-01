@@ -1,5 +1,6 @@
 // message center display
 const MESSAGE_TIMEOUT = 5000;
+let displayTimer = null;
 
 function displayMessage(target, message, displayTime) {
   const messageCenter = document.getElementById(target);
