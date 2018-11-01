@@ -15,16 +15,12 @@
 	<div class="container">
 		<div id="message-center" class="alert alert-primary hidden"></div>
 
-		<div>
-			PPS Diagnosis Importation Tool
-		</div>
-
 		<div class="accordion" id="pps-steps-accordion">
 				<div class="card">
 						<div class="card-header" id="generate-sql-header">
 						  <h5 class="mb-0">
 							<button class="btn btn-link" type="button" data-toggle="collapse" data-target="#generate-sql-step" aria-expanded="true" aria-controls="generate-sql-step">
-							  Step - Generate Diagnosis SQL Statement
+							  Step One - Generate Diagnosis SQL Statement
 							</button>
 						  </h5>
 						</div>
@@ -32,32 +28,38 @@
 								<div class="card-body">
 
 										<div id="generate-sql">
-												<div class="form-row">
+												<div class="row row-program">
 													<div class="col">
-														<label for="program-code-inpt">Program Code</label>
-														<input type="text" class="form-control form-control-sm" id="program-code-inpt" name="program-code-inpt" />
+														<label class="form-check-label" for="program-code-inpt">Program Code</label>
+														<input type="text" class="form-control form-control-sm program-input" placeholder="Program Maintenance to get Code" id="program-code-inpt" name="program-code-inpt" />
 													</div>
 													<div class="col">
-														<label for="program-value-inpt">Program Value</label>
-														<input type="text" class="form-control form-control-sm" id="program-value-inpt" name="program-value-inpt" />
-													</div>
-												</div>
-												<div class="row">
-													<div class="col">
-														<button class="btn btn-sm" id="add-program-btn" name="add-program-btn">Add Program</button>
-														<button class="btn btn-sm" id="clear-program-btn" name="clear-program-btn">Cancel Entry</button>
+														<label class="form-check-label" for="program-value-inpt">Program Value</label>
+														<input type="text" class="form-control form-control-sm program-input " id="program-value-inpt" name="program-value-inpt" />
 													</div>
 												</div>
+												<div class="row text-center">
+													<div class="col">
+														<button class="btn btn-sm btn-secondary " id="add-program-btn" name="add-program-btn">Add Program Entry</button>
+														<button class="btn btn-sm btn-secondary" id="clear-program-btn" name="clear-program-btn">Cancel Entry</button>
+													</div>
+												</div>
 									
 									
-												<ul id="program-list">
-												</ul>
-									
+												<div id="program-list-section">
+													<!-- location to populate program entries -->
+													<ul id="program-list">
+													</ul>
+												</div>
 									
 												<div id="sql-output-area">
-													<button class="btn btn-sm" id="generate-sql-btn" name="generate-sql-btn">Generate SQL</button>
-													<button class="btn btn-sm btn-copy" id="copy-sql-btn" name="cop-sql-btn" data-clipboard-target="#sql-output-text">Copy SQL to Clipboard</button>
-													<textarea class="form-control" id="sql-output-text">
+													<div class="row row-program text-center">
+														<div class="col">
+															<button class="btn btn-sm btn-secondary " id="generate-sql-btn" name="generate-sql-btn">Generate SQL</button>
+															<button class="btn btn-sm btn-secondary btn-copy" id="copy-sql-btn" name="cop-sql-btn" data-clipboard-target="#sql-output-text">Copy SQL to Clipboard</button>
+														</div>
+													</div>
+													<textarea class="form-control" id="sql-output-text" placeholder="Generated SQL" readonly>
 									
 													</textarea>
 												</div>

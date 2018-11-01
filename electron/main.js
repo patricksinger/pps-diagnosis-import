@@ -19,11 +19,11 @@ function launchWindows() {
 }
 
 function createMainWindow() {
-	mainWindow = new BrowserWindow({width: 800, height: 600});
+	mainWindow = new BrowserWindow({width: 800, height: 800});
 	mainWindow.loadFile('howto.html');
 	createMenu();
 
-	mainWindow.webContents.openDevTools();
+	//mainWindow.webContents.openDevTools();
 
 	mainWindow.on('closed', () => {
 		mainWindow = null;
@@ -34,7 +34,7 @@ function createMainWindow() {
 function createMenu() {
 	const menu = Menu.buildFromTemplate([
 		{
-			label: "Menu",
+			label: "File",
 			submenu: [
 				{ label: "Settings", click() { createSettingsWindow() }},
 				{type:'separator'},

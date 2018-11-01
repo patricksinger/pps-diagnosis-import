@@ -1,6 +1,7 @@
 body {
 	padding-top: 2rem;
 	padding-bottom: 2rem;
+	background-color: #E5E5E6;
 }
 
 ul {
@@ -15,8 +16,12 @@ li {
 	border-bottom: solid 1px gray;
 }
 
+.row-program {
+	margin-bottom: 1rem;
+}
+
 .row-settings {
-	padding-bottom: 1rem;
+	margin-bottom: 1rem;
 }
 
 .hidden {
@@ -27,10 +32,23 @@ li {
 	text-align: center;
 }
 
+.program-input {
+	width: 15rem;
+}
+
 .settings-input {
 	width: 20rem;
 }
 
+#program-list-section {
+	margin-top: 2rem;
+}
+
 #sql-output-area {
-	margin-top : 25px
+	margin-top : 2rem;
+	padding-top: 1rem;
+}
+
+#sql-output-text {
+	height: 200px;
 }
