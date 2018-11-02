@@ -107,13 +107,12 @@ function createExportXML(json, xmlFile, settings) {
 	output = stringutils.replaceAll(output, "</spcplaceholder>", "");
 	output = stringutils.replaceAll(output, "maintable", settings.get("MAIN_TABLE"));
 
-	// output to file
-	// @TODO add to settings for output location and fiilename
 	fs.writeFileSync(xmlFile, output);
-	console.log("Export File Completed.")
+
 }
 
 module.exports.parseCSV = parseCSV;
+
 // ONLY SELECT ACTIVE EPISODES OR ALL?
 // TAKE OUT CLASSIFICATION LIMIT ON DIAGNOSES
 // MAKE P DIAGNOSIS REQUIRED / CLASSIFICATION REQUIRED ON DIAGNOSIS

@@ -5,14 +5,23 @@ var dragging = null;
 
 var clipboard = new ClipboardJS('.btn-copy');
 
+// GLOBAL VARIABLES - move to settings
 const RANK_INCREMENT_MULTIPLIER = 10000;
 
 // global variables for scope
-const Store = require('electron-store');
+const Store = require("electron-store");
 const settings = new Store({cwd:"./"});
 
+// event emmitter handler
+const events = require("events");
+const eventEmmitter = new events.EventEmitter();
 
-// event handlers
+eventEmmitter.on('message', (message) => {
+  displayMessage("message-center", message);
+});
+
+
+// dom event handlers
 document.getElementById("add-program-btn").addEventListener("click", addProgramHandler);
 document.getElementById("program-code-inpt").addEventListener("keyup", addProgramInputHandler)
 document.getElementById("program-value-inpt").addEventListener("keyup", addProgramInputHandler)
@@ -37,7 +46,7 @@ function addProgramHandler() {
   if (currentCode) {
     updateProgramArray(currentCode, currentValue ? currentValue : currentCode);
   } else {
-    displayMessage("message-center", "No Program Information Entered");
+    eventEmmitter.emit("message", "No Program Information Entered");
   }
 }
 
@@ -58,7 +67,7 @@ function updateProgramArray(code, value) {
     currentIndex = "";
   } else if (programArray.filter(program => program.code === code || program.value === value).length > 0) {
     // code or value already present in list
-    displayMessage("message-center", "Program Code or Value Already Entered in List");
+    eventEmmitter.emit("message", "Program Code or Value Already Entered in List");
   } else {
     // add to list
     programArray.push({
@@ -157,7 +166,7 @@ function deleteElementHandler(event) {
 function generateSQLHandler() {
 
   if (programArray.length < 1) {
-    displayMessage("message-center", "No Programs Entered for SQL Statement");
+    eventEmmitter.emit("message", "No Programs Entered for SQL Statement");
   } else {
 
     var programOutput = programArray.reverse().map(function (program, index) {
@@ -196,7 +205,7 @@ function generateSQLHandler() {
         when e.date_of_discharge IS NULL then 17500
         else e.EPISODE_NUMBER * 5
       end as ranking_multiplier, 
-      (select COUNT(ID) from client_diagnosis_entry WHERE PATID = e.PATID and EPISODE_NUMBER = e.EPISODE_NUMBER and diagnosis_status_code = '1' and ranking_code ='1' and (classification_code not in ('1','2','3') or classification_code is null)) as totaldx,
+      (select COUNT(ID) from client_diagnosis_entry WHERE PATID = e.PATID and EPISODE_NUMBER = e.EPISODE_NUMBER and diagnosis_status_code = '1' and ranking_code ='1' and (classification_code not in ('1','2','3') or classification_code is null or classification_code = 'No Entry')) as totaldx,
       e.*
       from episode_history as e
       ) as ranking 
@@ -216,7 +225,7 @@ function generateSQLHandler() {
         when e.date_of_discharge IS NULL then 17500
         else e.EPISODE_NUMBER * 5
       end as ranking_multiplier, 
-      (select COUNT(ID) from client_diagnosis_entry WHERE PATID = e.PATID and EPISODE_NUMBER = e.EPISODE_NUMBER and diagnosis_status_code = '1' and ranking_code ='1' and (classification_code not in ('1','2','3') or classification_code is null)) as totaldx,
+      (select COUNT(ID) from client_diagnosis_entry WHERE PATID = e.PATID and EPISODE_NUMBER = e.EPISODE_NUMBER and diagnosis_status_code = '1' and ranking_code ='1' and (classification_code not in ('1','2','3') or classification_code is null or classification_code = 'No Entry')) as totaldx,
       e.*
       from episode_history as e
       ) as ranking 
@@ -228,7 +237,7 @@ function generateSQLHandler() {
     left outer join client_diagnosis_record as DIAGR ON mhdx.PATID = DIAGR.PATID and mhdx.FACILITY = DIAGR.FACILITY and DIAGR.EPISODE_NUMBER = mhdx.EPISODE_NUMBER
     left outer join client_diagnosis_entry as DIAGE ON DIAGE.DiagnosisRecord = DIAGR.ID AND DIAGE.PATID = DIAGR.PATID AND DIAGE.FACILITY = DIAGR.FACILITY
     left outer join client_diagnosis_codes AS DIAGC ON DIAGE.ID = DIAGC.DiagnosisEntry AND DIAGE.PATID = DIAGC.PATID AND DIAGE.FACILITY = DIAGC.FACILITY
-    where DIAGC.code_set_code = 'ICD10' and DIAGE.diagnosis_status_code = '1' and DIAGE.ranking_code ='1' and (DIAGE.classification_code not in ('1', '2','3') or DIAGE.classification_code IS NULL) and mhdx.patid = pps.PATID
+    where DIAGC.code_set_code = 'ICD10' and DIAGE.diagnosis_status_code = '1' and DIAGE.ranking_code ='1' and (DIAGE.classification_code not in ('1', '2','3') or DIAGE.classification_code IS NULL or DIAGE.classification_code = 'No Entry') and mhdx.patid = pps.PATID
     group by mhdx.PATID, mhdx.EPISODE_NUMBER, DIAGR.FACILITY, DIAGE.DiagnosisRecord, DIAGR.date_of_diagnosis, DIAGE.billing_order, DIAGC.diagnosis_code, DIAGC.diagnosis_value
     order by DIAGR.date_of_diagnosis DESC
     ) as primary_diagnosis,
@@ -273,11 +282,19 @@ function selectXMLFileHandler() {
 function generateImportHandler() {
   const remote = require("electron").remote;
   const csvParser = remote.require('./csvparser');
-  // @TODO error check if no files given
-  if (document.getElementById("csv-file-path").value && document.getElementById("xml-file-path").value) {
+  
+  if (!document.getElementById("csv-file-path").value && !document.getElementById("xml-file-path").value) {
+    eventEmmitter.emit("message", "Please Select Import and Export File Locations");
+  } else if (!document.getElementById("csv-file-path").value ) {
+    eventEmmitter.emit("message", "Please Select Import File Location");
+  }
+  else if (!document.getElementById("xml-file-path").value) {
+    eventEmmitter.emit("message", "Please Select Export File Location");
+  }
+  else {
+    // @TODO Error Checking if Export Fails and Message Tied to Parsing Result
     csvParser.parseCSV(document.getElementById("csv-file-path").value, document.getElementById("xml-file-path").value);
-  } else {
-    displayMessage("message-center", "Please Select Import and Export File Locations");
+    eventEmmitter.emit("message", "File Export Complete.");
   }
 }
 
