@@ -11,6 +11,7 @@ function loadSettingsHandler() {
     document.getElementById("main-table-inpt").value = settings.get("MAIN_TABLE") === undefined ? "" : settings.get("MAIN_TABLE");
     document.getElementById("spc-table-inpt").value = settings.get("SPC_TABLE") === undefined  ? "" : settings.get("SPC_TABLE");
     document.getElementById("open-pps-chck").checked = settings.get("OPEN_PPS_ONLY") === undefined ? "" : settings.get("OPEN_PPS_ONLY");
+    document.getElementById("expand-sql-chck").checked = settings.get("EXPAND_SQL_TEXT") === undefined ? "" : settings.get("EXPAND_SQL_TEXT");
 }
 
 function settingsSaveHandler() {
@@ -23,6 +24,7 @@ function settingsSaveHandler() {
         settings.set("MAIN_TABLE", document.getElementById("main-table-inpt").value);
         settings.set("SPC_TABLE", document.getElementById("spc-table-inpt").value);
         settings.set("OPEN_PPS_ONLY", document.getElementById("open-pps-chck").checked);
+        settings.set("EXPAND_SQL_TEXT", document.getElementById("expand-sql-chck").checked);
         settingsExitHandler();
     }
 }

@@ -20,6 +20,10 @@ li {
 	margin-bottom: 1rem;
 }
 
+.row-file {
+	margin-bottom: 1rem;
+}
+
 .row-settings {
 	margin-bottom: 1rem;
 }
@@ -36,6 +40,11 @@ li {
 	width: 15rem;
 }
 
+.file-path-input {
+	width: 25rem;
+	margin-right: 1rem;
+}
+
 .settings-input {
 	width: 20rem;
 }
@@ -50,5 +59,5 @@ li {
 }
 
 #sql-output-text {
-	height: 200px;
+	resize: none;
 }

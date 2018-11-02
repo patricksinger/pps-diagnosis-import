@@ -239,6 +239,9 @@ function generateSQLHandler() {
     ${openEpisodesOnly}`
 
     document.getElementById("sql-output-text").value = sql;
+    if (settings.get("EXPAND_SQL_TEXT")) {
+      adjustTextBoxHeight(document.getElementById("sql-output-text"));
+    }
   }
 }
 
@@ -271,7 +274,11 @@ function generateImportHandler() {
   const remote = require("electron").remote;
   const csvParser = remote.require('./csvparser');
   // @TODO error check if no files given
-  csvParser.parseCSV(document.getElementById("csv-file-path").value, document.getElementById("xml-file-path").value);
+  if (document.getElementById("csv-file-path").value && document.getElementById("xml-file-path").value) {
+    csvParser.parseCSV(document.getElementById("csv-file-path").value, document.getElementById("xml-file-path").value);
+  } else {
+    displayMessage("message-center", "Please Select Import and Export File Locations");
+  }
 }
 
 

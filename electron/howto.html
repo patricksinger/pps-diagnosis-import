@@ -20,7 +20,7 @@
 						<div class="card-header" id="generate-sql-header">
 						  <h5 class="mb-0">
 							<button class="btn btn-link" type="button" data-toggle="collapse" data-target="#generate-sql-step" aria-expanded="true" aria-controls="generate-sql-step">
-							  Step One - Generate Diagnosis SQL Statement
+							  Step 1 - Generate Diagnosis SQL Statement
 							</button>
 						  </h5>
 						</div>
@@ -71,7 +71,7 @@
 									<div class="card-header" id="generate-csv-header">
 									  <h5 class="mb-0">
 										<button class="btn btn-link" type="button" data-toggle="collapse" data-target="#generate-csv-step" aria-expanded="true" aria-controls="generate-csv-step">
-										  Step - Generate CSV / XML File
+										  Step 2 - Generate CSV / XML File
 										</button>
 									  </h5>
 									</div>
@@ -80,17 +80,17 @@
 			
 													<div id="generate-csv-xml">
 
-															<div class="row">
-																<input type="text" id="csv-file-path" readonly><button class="btn btn-sm" id="select-csv-btn" name="select-csv-btn">Select CSV File</button>
+															<div class="row row-file">
+																<input class="form-control form-control-sm file-path-input" type="text" id="csv-file-path" readonly><button class="btn btn-sm btn-secondary" id="select-csv-btn">Select CSV Import File</button>
 															</div>
 										
-															<div class="row">
-																<input type="text" id="xml-file-path" readonly><button class="btn btn-sm" id="select-xml-btn" name="select-xml-btn">Select XML Export Location</button>
+															<div class="row row-file">
+																<input class="form-control form-control-sm file-path-input" type="text" id="xml-file-path" readonly><button class="btn btn-sm btn-secondary" id="select-xml-btn">Select XML Export Location</button>
 															</div>
 															<! -- add ouput path and file name selectors -->
 												
-															<div id="row">
-																<button class="btn btn-sm" id="generate-import-btn" name="generate-import-btn">Generate Import File</button>
+															<div id="row text-center">
+																<button class="btn btn-sm btn-secondary" id="generate-import-btn" name="generate-import-btn">Generate Import File</button>
 															</div>
 
 
@@ -104,6 +104,7 @@
 
 	</div>
 	
+	<!--  move to npm -->
 	<script src="https://unpkg.com/ionicons@4.3.0/dist/ionicons.js"></script>
 	<script src="https://unpkg.com/clipboard@2.0.0/dist/clipboard.min.js"></script>
 	<script src="js/utils.js"></script>
@@ -118,7 +119,7 @@
 	<script src="node_modules/bootstrap/dist/js/bootstrap.js"></script>	
 
 	<script>
-		$("#pps-steps-accordion").collapse('hide');
+		// $("#pps-steps-accordion").collapse('hide');
 	</script>
 
 </body>
