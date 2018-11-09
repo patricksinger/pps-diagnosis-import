@@ -21,6 +21,19 @@ eventEmmitter.on('message', (message) => {
 });
 
 
+// blank settings handler
+function settingsValidation() {
+
+  if (settings.get("OPTION_ID") && settings.get("OPTION_ID") && settings.get("OPTION_ID")) {
+    return true;
+  } else {
+    eventEmmitter.emit("message", "Unable to Process Action due to Settings Configuration Incomplete");
+    
+    return false;
+  }
+
+}
+
 // dom event handlers
 document.getElementById("add-program-btn").addEventListener("click", addProgramHandler);
 document.getElementById("program-code-inpt").addEventListener("keyup", addProgramInputHandler)
