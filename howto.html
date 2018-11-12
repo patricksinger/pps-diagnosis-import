@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>PPS Diagnosis Enhancement - Implementation Guide</title>
+	<title>WI PPS Diagnosis Enhancement - Data Import Tool</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
 	<link rel="stylesheet" href="css/style.css">
@@ -105,8 +105,8 @@
 	</div>
 	
 	<!--  move to npm -->
-	<script src="https://unpkg.com/ionicons@4.3.0/dist/ionicons.js"></script>
-	<script src="https://unpkg.com/clipboard@2.0.0/dist/clipboard.min.js"></script>
+	<script src="node_modules/ionicons/dist/ionicons.js"></script>
+	<script src="node_modules/clipboard/dist/clipboard.min.js"></script>
 	<script src="js/utils.js"></script>
 	<script src="js/howto.js"></script>
 
@@ -119,7 +119,10 @@
 	<script src="node_modules/bootstrap/dist/js/bootstrap.js"></script>	
 
 	<script>
-		// $("#pps-steps-accordion").collapse('hide');
+		$( document ).ready(function() {
+				$("#generate-sql-step").collapse('hide');
+				$("#generate-csv-step").collapse('hide');
+		});
 	</script>
 
 </body>

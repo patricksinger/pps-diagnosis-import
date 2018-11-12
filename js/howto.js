@@ -21,19 +21,6 @@ eventEmmitter.on('message', (message) => {
 });
 
 
-// blank settings handler
-function settingsValidation() {
-
-  if (settings.get("OPTION_ID") && settings.get("OPTION_ID") && settings.get("OPTION_ID")) {
-    return true;
-  } else {
-    eventEmmitter.emit("message", "Unable to Process Action due to Settings Configuration Incomplete");
-    
-    return false;
-  }
-
-}
-
 // dom event handlers
 document.getElementById("add-program-btn").addEventListener("click", addProgramHandler);
 document.getElementById("program-code-inpt").addEventListener("keyup", addProgramInputHandler)
@@ -306,11 +293,25 @@ function generateImportHandler() {
   }
   else {
     // @TODO Error Checking if Export Fails and Message Tied to Parsing Result
-    csvParser.parseCSV(document.getElementById("csv-file-path").value, document.getElementById("xml-file-path").value);
-    eventEmmitter.emit("message", "File Export Complete.");
+    if (settingsValidation()) {
+      csvParser.parseCSV(document.getElementById("csv-file-path").value, document.getElementById("xml-file-path").value);
+      eventEmmitter.emit("message", "File Export Complete.");
+    }
   }
 }
 
+// blank settings check function
+function settingsValidation() {
+
+  if (settings.get("OPTION_ID") && settings.get("OPTION_ID") && settings.get("OPTION_ID")) {
+    return true;
+  } else {
+    eventEmmitter.emit("message", "Unable to Process Action Due to Settings Configuration Incomplete. Please Launch Settings.");
+    
+    return false;
+  }
+
+}
 
 // clipboard handler functions
 clipboard.on("success", function(e) {
