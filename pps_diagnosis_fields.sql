@@ -1,7 +1,7 @@
 
 -- PRINICPAL MAKE REQUIRED
 
-// Principal
+// Principal COPY and PASTE BELOW IN TO SQL FIELD IN FORM DEFINITION
 
 select DIAGE.icd_code, REPLACE(STRING(CASE WHEN EP.date_of_discharge IS NULL THEN 'Active - ' ELSE 'Discharged - ' END ,'Episode', CASE WHEN COUNT(EP.PATID) > 1 THEN 's' ELSE '' END, ': ',
  LIST(DISTINCT EP.program_value),' - Diagnosis Code: ',DIAGE.icd_code, ' (',
@@ -17,7 +17,7 @@ ORDER BY EP.date_of_discharge ASC, EP.preadmit_admission_date DESC
 
 // DIAG IMP 1 - 7
 
-// 1
+// 1 COPY and PASTE BELOW IN TO SQL FIELD IN FORM DEFINITION
 
 select DIAGE.icd_code, REPLACE(STRING(CASE WHEN EP.date_of_discharge IS NULL THEN 'Active - ' ELSE 'Discharged - ' END ,'Episode', CASE WHEN COUNT(EP.PATID) > 1 THEN 's' ELSE '' END, ': ',
  LIST(DISTINCT EP.program_value),' - Diagnosis Code: ',DIAGE.icd_code, ' (',
@@ -32,7 +32,7 @@ AND DIAGE.icd_code <> :user_pps_mh_NonEpisodic.principal_diagnosis_code
 GROUP BY DIAGE.icd_code
 ORDER BY EP.date_of_discharge ASC, EP.preadmit_admission_date DESC
 
-// 2
+// 2 COPY and PASTE BELOW IN TO SQL FIELD IN FORM DEFINITION
 
 select DIAGE.icd_code, REPLACE(STRING(CASE WHEN EP.date_of_discharge IS NULL THEN 'Active - ' ELSE 'Discharged - ' END ,'Episode', CASE WHEN COUNT(EP.PATID) > 1 THEN 's' ELSE '' END, ': ',
  LIST(DISTINCT EP.program_value),' - Diagnosis Code: ',DIAGE.icd_code, ' (',
@@ -47,7 +47,7 @@ AND (DIAGE.icd_code <> :user_pps_mh_NonEpisodic.principal_diagnosis_code AND DIA
 GROUP BY DIAGE.icd_code
 ORDER BY EP.date_of_discharge ASC, EP.preadmit_admission_date DESC
 
-// 3
+// 3 COPY and PASTE BELOW IN TO SQL FIELD IN FORM DEFINITION
 
 select DIAGE.icd_code, REPLACE(STRING(CASE WHEN EP.date_of_discharge IS NULL THEN 'Active - ' ELSE 'Discharged - ' END ,'Episode', CASE WHEN COUNT(EP.PATID) > 1 THEN 's' ELSE '' END, ': ',
  LIST(DISTINCT EP.program_value),' - Diagnosis Code: ',DIAGE.icd_code, ' (',
@@ -62,7 +62,7 @@ AND (DIAGE.icd_code <> :user_pps_mh_NonEpisodic.principal_diagnosis_code AND DIA
 GROUP BY DIAGE.icd_code
 ORDER BY EP.date_of_discharge ASC, EP.preadmit_admission_date DESC
 
-// 4
+// 4 COPY and PASTE BELOW IN TO SQL FIELD IN FORM DEFINITION
 
 select DIAGE.icd_code, REPLACE(STRING(CASE WHEN EP.date_of_discharge IS NULL THEN 'Active - ' ELSE 'Discharged - ' END ,'Episode', CASE WHEN COUNT(EP.PATID) > 1 THEN 's' ELSE '' END, ': ',
  LIST(DISTINCT EP.program_value),' - Diagnosis Code: ',DIAGE.icd_code, ' (',
@@ -78,7 +78,7 @@ DIAGE.icd_code <> :user_pps_mh_NonEpisodic.diagnostic_impression_3)
 GROUP BY DIAGE.icd_code
 ORDER BY EP.date_of_discharge ASC, EP.preadmit_admission_date DESC
 
-// 5
+// 5 COPY and PASTE BELOW IN TO SQL FIELD IN FORM DEFINITION
 
 select DIAGE.icd_code, REPLACE(STRING(CASE WHEN EP.date_of_discharge IS NULL THEN 'Active - ' ELSE 'Discharged - ' END ,'Episode', CASE WHEN COUNT(EP.PATID) > 1 THEN 's' ELSE '' END, ': ',
  LIST(DISTINCT EP.program_value),' - Diagnosis Code: ',DIAGE.icd_code, ' (',
@@ -94,7 +94,7 @@ AND DIAGE.icd_code <> :user_pps_mh_NonEpisodic.diagnostic_impression_3 AND DIAGE
 GROUP BY DIAGE.icd_code
 ORDER BY EP.date_of_discharge ASC, EP.preadmit_admission_date DESC
 
-// 6
+// 6 COPY and PASTE BELOW IN TO SQL FIELD IN FORM DEFINITION
 
 select DIAGE.icd_code, REPLACE(STRING(CASE WHEN EP.date_of_discharge IS NULL THEN 'Active - ' ELSE 'Discharged - ' END ,'Episode', CASE WHEN COUNT(EP.PATID) > 1 THEN 's' ELSE '' END, ': ',
  LIST(DISTINCT EP.program_value),' - Diagnosis Code: ',DIAGE.icd_code, ' (',
@@ -110,7 +110,7 @@ AND DIAGE.icd_code <> :user_pps_mh_NonEpisodic.diagnostic_impression_3 AND DIAGE
 GROUP BY DIAGE.icd_code
 ORDER BY EP.date_of_discharge ASC, EP.preadmit_admission_date DESC
 
-// 7
+// 7 COPY and PASTE BELOW IN TO SQL FIELD IN FORM DEFINITION
 
 select DIAGE.icd_code, REPLACE(STRING(CASE WHEN EP.date_of_discharge IS NULL THEN 'Active - ' ELSE 'Discharged - ' END ,'Episode', CASE WHEN COUNT(EP.PATID) > 1 THEN 's' ELSE '' END, ': ',
  LIST(DISTINCT EP.program_value),' - Diagnosis Code: ',DIAGE.icd_code, ' (',
