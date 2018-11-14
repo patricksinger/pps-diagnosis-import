@@ -241,10 +241,10 @@ function generateSQLHandler() {
     group by mhdx.PATID, mhdx.EPISODE_NUMBER, DIAGR.FACILITY, DIAGE.DiagnosisRecord, DIAGR.date_of_diagnosis, DIAGE.billing_order, DIAGC.diagnosis_code, DIAGC.diagnosis_value
     order by DIAGR.date_of_diagnosis DESC
     ) as primary_diagnosis,
-    spc. CUSTHAGQ_UID as spc_id,
+    spc.${settings.get("SPC_PK_FIELD")} as spc_id,
     'E' as spc_action
-    from user_pps_mh_NonEpisodic as pps
-    left outer join user_pps_mh_spc as spc on spc.PATID = pps.PATID and spc.CUSTHAGO_UID = pps.CUSTHAGO_UID
+    from ${settings.get("MAIN_TABLE")} as pps
+    left outer join ${settings.get("SPC_TABLE")} as spc on spc.PATID = pps.PATID and spc.${settings.get("MAIN_PK_FIELD")} = pps.${settings.get("MAIN_PK_FIELD")}
     ${openEpisodesOnly}`
 
     document.getElementById("sql-output-text").value = sql;
@@ -303,7 +303,7 @@ function generateImportHandler() {
 // blank settings check function
 function settingsValidation() {
 
-  if (settings.get("OPTION_ID") && settings.get("OPTION_ID") && settings.get("OPTION_ID")) {
+  if (settings.get("OPTION_ID") && settings.get("MAIN_TABLE") && settings.get("MAIN_PK_FIELD") && settings.get("SPC_TABLE") && settings.get("SPC_PK_FIELD")) {
     return true;
   } else {
     eventEmmitter.emit("message", "Unable to Process Action Due to Settings Configuration Incomplete. Please Launch Settings.");

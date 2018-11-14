@@ -42,7 +42,7 @@ function createMenu() {
 }
 
 function createSettingsWindow() {
-	settingsWindow = new BrowserWindow({ parent: mainWindow, modal: true, width: 600, height: 400, skipTaskbar : true, resizable: false});
+	settingsWindow = new BrowserWindow({ parent: mainWindow, modal: true, width: 600, height: 600, skipTaskbar : true, resizable: false});
 	settingsWindow.on("close", function () { settingsWindow = null });
 	settingsWindow.loadFile("settings.html");
 	settingsWindow.setMenu(null);
