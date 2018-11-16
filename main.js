@@ -6,6 +6,21 @@ const Store = require('electron-store');
 app.setPath("userData", path.join(__dirname, "AppData"));
 const settings = new Store({cwd:"./"});
 
+const csvParser = require("./csvparser");
+
+// IPC handlers
+const {ipcMain} = require('electron');
+
+ipcMain.on("csv-parser-invoke", (event, arg) => {
+	try {
+		csvParser.parseCSV(arg["sqlText"], arg["csvFileLocation"], arg["xmlFileLocation"],arg["odbcDSN"], arg["odbcUser"], arg["odbcPassword"]);
+	} catch (exception) {
+		event.sender.send("csv-parser-response", exception);
+		return;
+	}
+	event.sender.send("csv-parser-response", "File Export Complete.");
+});
+
 let mainWindow;
 let settingsWindow;
 

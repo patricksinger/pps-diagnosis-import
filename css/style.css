@@ -24,7 +24,7 @@ li {
 	margin-bottom: 1rem;
 }
 
-.row-settings {
+.row-settings, .row-howto {
 	margin-bottom: 1rem;
 }
 
@@ -37,7 +37,7 @@ li {
 }
 
 .program-input {
-	width: 15rem;
+	width: 100%;
 }
 
 .file-path-input {
@@ -45,8 +45,14 @@ li {
 	margin-right: 1rem;
 }
 
-.settings-input {
+.settings-input, .howto-input {
 	width: 20rem;
+}
+
+.howto-info {
+	text-align: center;
+	font-weight: lighter;
+	font-style: italic;
 }
 
 #program-list-section {

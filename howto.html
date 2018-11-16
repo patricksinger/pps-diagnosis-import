@@ -28,7 +28,7 @@
 								<div class="card-body">
 
 										<div id="generate-sql">
-												<div class="row row-program">
+												<div class="row row-program text-center">
 													<div class="col">
 														<label class="form-check-label" for="program-code-inpt">Program Code</label>
 														<input type="text" class="form-control form-control-sm program-input" placeholder="Program Maintenance to get Code" id="program-code-inpt" name="program-code-inpt" />
@@ -55,8 +55,8 @@
 												<div id="sql-output-area">
 													<div class="row row-program text-center">
 														<div class="col">
-															<button class="btn btn-sm btn-secondary " id="generate-sql-btn" name="generate-sql-btn">Generate SQL</button>
-															<button class="btn btn-sm btn-secondary btn-copy" id="copy-sql-btn" name="cop-sql-btn" data-clipboard-target="#sql-output-text">Copy SQL to Clipboard</button>
+															<button class="btn btn-sm btn-secondary " id="generate-sql-btn" name="generate-sql-btn">Generate SQL Statement</button>
+															<!-- <button class="btn btn-sm btn-secondary btn-copy" id="copy-sql-btn" name="cop-sql-btn" data-clipboard-target="#sql-output-text">Copy SQL to Clipboard</button> -->
 														</div>
 													</div>
 													<textarea class="form-control" id="sql-output-text" placeholder="Generated SQL" readonly>
@@ -67,38 +67,58 @@
 								</div>
 							  </div>
 							</div>		
-							<div class="card">
-									<div class="card-header" id="generate-csv-header">
-									  <h5 class="mb-0">
-										<button class="btn btn-link" type="button" data-toggle="collapse" data-target="#generate-csv-step" aria-expanded="true" aria-controls="generate-csv-step">
-										  Step 2 - Generate CSV / XML File
-										</button>
-									  </h5>
-									</div>
-									<div id="generate-csv-step" class="collapse show" aria-labelledby="generate-csv-step" data-parent="#pps-steps-accordion">
-											<div class="card-body">
-			
-													<div id="generate-csv-xml">
 
-															<div class="row row-file">
-																<input class="form-control form-control-sm file-path-input" type="text" id="csv-file-path" readonly><button class="btn btn-sm btn-secondary" id="select-csv-btn">Select CSV Import File</button>
-															</div>
-										
-															<div class="row row-file">
-																<input class="form-control form-control-sm file-path-input" type="text" id="xml-file-path" readonly><button class="btn btn-sm btn-secondary" id="select-xml-btn">Select XML Export Location</button>
-															</div>
-															<! -- add ouput path and file name selectors -->
-												
-															<div id="row text-center">
-																<button class="btn btn-sm btn-secondary" id="generate-import-btn" name="generate-import-btn">Generate Import File</button>
-															</div>
-
-
-														</div>
-												
+										<div class="card">
+											<div class="card-header" id="generate-csv-header">
+												<h5 class="mb-0">
+												<button class="btn btn-link" type="button" data-toggle="collapse" data-target="#generate-csv-step" aria-expanded="true" aria-controls="generate-csv-step">
+													Step 2 - Generate CSV / XML File
+												</button>
+												</h5>
 											</div>
-										  </div>
-										</div>												
+											<div id="generate-csv-step" class="collapse show" aria-labelledby="generate-csv-step" data-parent="#pps-steps-accordion">
+													<div class="card-body">
+					
+															<div id="generate-csv-xml" class="text-center">
+																		
+																	<div class="row row-howto">
+																			<div class="col"><label class="form-check-label" for="odbc-dsn-inpt">ODBC DSN</label></div>
+																					<div class="col-auto"><input class="form-control form-control-sm howto-input" type="text" id="odbc-dsn-inpt"></div>
+																	</div>
+
+																	<div class="row row-howto">
+																			<div class="col"><label class="form-check-label" for="odbc-user-inpt">Avatar User Name</label></div>
+																					<div class="col-auto"><input class="form-control form-control-sm howto-input" type="text" id="odbc-user-inpt" placeholder="Prefixed with Environment (i.e. LIVE: or UAT:)"></div>
+																	</div>																	
+
+																	<div class="row row-howto">
+																			<div class="col"><label class="form-check-label" for="odbc-password-inpt">Avatar Password</label></div>
+																					<div class="col-auto"><input class="form-control form-control-sm howto-input" type="password" id="odbc-password-inpt"></div>
+																	</div>			
+																	
+																	<div class="row row-howto text-center">
+																			<div class="col howto-info">User Name and Password Information is Not Saved on Disk or Otherwise Retained</div>
+																	</div>
+																																			
+
+																	<div class="row row-file">
+																		<div class="col"><input class="form-control form-control-sm file-path-input" type="text" id="xml-file-path" readonly></div>
+																		<div class="col"><button class="btn btn-sm btn-secondary" id="select-xml-btn">Select XML Export Location</button></div> 
+																	</div>
+
+																	<div id="row text-center">
+																		<div class="col">
+																				<button class="btn btn-sm btn-secondary" id="generate-import-btn" name="generate-import-btn">Generate Import File</button>
+																			</div> 
+																	</div>
+		
+																</div>
+														
+													</div>
+													</div>
+												</div>
+										
+
 		</div>
 
 

@@ -1,18 +1,55 @@
 const csvParser = require("csvtojson");
 const jsonxml = require("jsontoxml");
 const fs = require("fs");
+const execSync = require("child_process").execSync;
+
 const stringutils = require("./stringutils");
 
 const Store = require('electron-store');
 const settings = new Store({cwd:"./"});
 
+const CSV_BUILDER_ERRORS = {
+	0: "Success",
+	1: "csvBuilder Error Invalid Arguments Provided",
+	2: "csvBuilder Error with SQL File Load",
+	3: "csvBuilder Error With ODBC DSN Connection - Check User Name and Password"
+};
 
-function parseCSV(csvFile, xmlFile) {
-	csvParser()
-		.fromFile(csvFile)
-		.then((jsonOutput) => {
-			createExportXML(jsonOutput, xmlFile, settings);
-		});
+function parseCSV(sqlStatement, csvFile, xmlFile, odbcDSN, odbcUser, odbcPassword) {
+	try {
+		saveSQLFile(sqlStatement);
+		generateCSV(csvFile, odbcDSN, odbcUser, odbcPassword);
+		csvParser()
+			.fromFile(csvFile)
+			.then((jsonOutput) => {
+				removeCSVFile(csvFile);
+				createExportXML(jsonOutput, xmlFile, settings);
+			});
+	} catch (error) {
+		throw error;
+	}
+}
+
+function saveSQLFile(sqlStatement) {
+	fs.writeFileSync("sqlStatement.sql", sqlStatement, function(err) {
+		throw "Unable to Write SQL Statement File - " + err;
+	});
+}
+
+function generateCSV(csvFile, odbcDSN, odbcUser, odbcPassword) {
+	try {
+		execSync(`${process.cwd()}\\csvBuilder.exe ${odbcDSN} ${odbcUser} ${odbcPassword} sqlStatement.sql ${csvFile}`)
+	} catch (error) {
+		throw CSV_BUILDER_ERRORS[error.status] + " - " + error.message;
+	}
+}
+
+function removeCSVFile(csvFile) {
+	try {
+		fs.unlinkSync(csvFile);
+	} catch (error) {
+		throw "Unable to Delete CSV File - " + error;
+	}
 }
 
 function createExportXML(json, xmlFile, settings) {
@@ -107,13 +144,12 @@ function createExportXML(json, xmlFile, settings) {
 	output = stringutils.replaceAll(output, "</spcplaceholder>", "");
 	output = stringutils.replaceAll(output, "maintable", settings.get("MAIN_TABLE"));
 
-	fs.writeFileSync(xmlFile, output);
+	try {
+		fs.writeFileSync(xmlFile, output);
+	} catch (error) {
+		throw "Unable to Write XML Export File - " + error;
+	}
 
 }
 
 module.exports.parseCSV = parseCSV;
-
-// ONLY SELECT ACTIVE EPISODES OR ALL?
-// TAKE OUT CLASSIFICATION LIMIT ON DIAGNOSES
-// MAKE P DIAGNOSIS REQUIRED / CLASSIFICATION REQUIRED ON DIAGNOSIS
-// SQL DI 1-7 check other fields for duplicate values

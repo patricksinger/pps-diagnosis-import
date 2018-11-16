@@ -5,8 +5,10 @@ var dragging = null;
 
 var clipboard = new ClipboardJS('.btn-copy');
 
-// GLOBAL VARIABLES - move to settings
+// GLOBAL VARIABLES
 const RANK_INCREMENT_MULTIPLIER = 10000;
+const CSV_FILE_LOCATION = "import.csv";
+const ERROR_DISPLAY_TIME = 10000;
 
 // global variables for scope
 const Store = require("electron-store");
@@ -16,8 +18,15 @@ const settings = new Store({cwd:"./"});
 const events = require("events");
 const eventEmmitter = new events.EventEmitter();
 
-eventEmmitter.on('message', (message) => {
-  displayMessage("message-center", message);
+eventEmmitter.on('message', (message, displayTime) => {
+  displayMessage("message-center", message, displayTime);
+});
+
+// IPC handlers
+const {ipcRenderer} = require('electron');
+
+ipcRenderer.on('csv-parser-response', (event, responseMessage) => {
+  eventEmmitter.emit("message", responseMessage);
 });
 
 
@@ -34,7 +43,7 @@ document.getElementById("program-list").addEventListener('dragover', programList
 document.getElementById("program-list").addEventListener('dragleave', programListDragLeaveHandler);
 document.getElementById("program-list").addEventListener('drop', programListDragDropHandler);
 
-document.getElementById('select-csv-btn').addEventListener("click", selectCSVFileHandler);
+//document.getElementById('select-csv-btn').addEventListener("click", selectCSVFileHandler);
 document.getElementById('select-xml-btn').addEventListener("click", selectXMLFileHandler);
 document.getElementById('generate-import-btn').addEventListener("click", generateImportHandler);
 
@@ -78,7 +87,7 @@ function updateProgramArray(code, value) {
 
   // clean up and re-render list
   clearProgramHandler();
-  renderProgramList()
+  renderProgramList();
 }
 
 function clearProgramHandler() {
@@ -128,10 +137,6 @@ function renderProgramList() {
 }
 
 function editProgramHandler(event) {
-
-  console.log(programArray);
-  console.log(event.target.getAttribute("target-element"));
-
 
   // load target item values in to field inputs
   currentIndex = event.target.getAttribute("id");
@@ -254,17 +259,17 @@ function generateSQLHandler() {
   }
 }
 
-function selectCSVFileHandler() {
-    const remote = require('electron').remote;
-    const dialog = remote.dialog;
-    dialog.showOpenDialog(function(fileNames) {
-      if (fileNames === undefined) {
-        console.log('no file selected');
-      } else {
-        document.getElementById("csv-file-path").value = fileNames[0];
-      }
-    });
-}
+// function selectCSVFileHandler() {
+//     const remote = require('electron').remote;
+//     const dialog = remote.dialog;
+//     dialog.showOpenDialog(function(fileNames) {
+//       if (fileNames === undefined) {
+//         console.log('no file selected');
+//       } else {
+//         document.getElementById("csv-file-path").value = fileNames[0];
+//       }
+//     });
+// }
 
 function selectXMLFileHandler() {
   const remote = require("electron").remote;
@@ -280,22 +285,42 @@ function selectXMLFileHandler() {
 }
 
 function generateImportHandler() {
-  const remote = require("electron").remote;
-  const csvParser = remote.require('./csvparser');
-  
-  if (!document.getElementById("csv-file-path").value && !document.getElementById("xml-file-path").value) {
-    eventEmmitter.emit("message", "Please Select Import and Export File Locations");
-  } else if (!document.getElementById("csv-file-path").value ) {
-    eventEmmitter.emit("message", "Please Select Import File Location");
-  }
-  else if (!document.getElementById("xml-file-path").value) {
+  // change to IPC
+  //const remote = require("electron").remote;
+  //const csvParser = remote.require('./csvparser'); 
+  if (document.getElementById("sql-output-text").value.trim().length == 0 && !document.getElementById("odbc-dsn-inpt").value && !document.getElementById("odbc-user-inpt").value && !document.getElementById("odbc-password-inpt").value && !document.getElementById("xml-file-path").value) {
+    eventEmmitter.emit("message", "Please make sure SQL Statement Generated, ODBC DSN, User Name, Password and Export File Location Fields are Entered");
+  } else if (document.getElementById("sql-output-text").value.trim().length == 0) {
+    eventEmmitter.emit("message", "Please Generate SQL Statement");
+  } else if (!document.getElementById("odbc-dsn-inpt").value) {
+    eventEmmitter.emit("message", "Please Enter ODBC DSN");
+  } else if (!document.getElementById("odbc-user-inpt").value) {
+    eventEmmitter.emit("message", "Please Enter Avatar User Name");
+  } else if (!document.getElementById("odbc-password-inpt").value) {
+    eventEmmitter.emit("message", "Please Enter Avatar Password");
+  } else if (!document.getElementById("xml-file-path").value) {
     eventEmmitter.emit("message", "Please Select Export File Location");
   }
   else {
     // @TODO Error Checking if Export Fails and Message Tied to Parsing Result
+
     if (settingsValidation()) {
-      csvParser.parseCSV(document.getElementById("csv-file-path").value, document.getElementById("xml-file-path").value);
-      eventEmmitter.emit("message", "File Export Complete.");
+      csvParserOptions = {
+        sqlText: document.getElementById("sql-output-text").value,
+        csvFileLocation: CSV_FILE_LOCATION,
+        xmlFileLocation: document.getElementById("xml-file-path").value,
+        odbcDSN: document.getElementById("odbc-dsn-inpt").value,
+        odbcUser: document.getElementById("odbc-user-inpt").value,
+        odbcPassword: document.getElementById("odbc-password-inpt").value
+      }
+      ipcRenderer.send('csv-parser-invoke', csvParserOptions);
+
+      // try {
+      //   csvParser.parseCSV(document.getElementById("sql-output-text").value, CSV_FILE_LOCATION, document.getElementById("xml-file-path").value,document.getElementById("odbc-dsn-inpt").value, document.getElementById("odbc-user-inpt").value, document.getElementById("odbc-password-inpt").value);
+      //   eventEmmitter.emit("message", "File Export Complete.");
+      // } catch (error) {
+      //   eventEmmitter.emit("message", "Error Generating File - " + error, ERROR_DISPLAY_TIME);
+      // }
     }
   }
 }
