@@ -15,6 +15,8 @@ const CSV_BUILDER_ERRORS = {
 	3: "csvBuilder Error With ODBC DSN Connection - Check User Name and Password"
 };
 
+const SQL_STATEMENT = 'sqlStatement.sql';
+
 function parseCSV(sqlStatement, csvFile, xmlFile, odbcDSN, odbcUser, odbcPassword) {
 	try {
 		saveSQLFile(sqlStatement);
@@ -38,9 +40,16 @@ function saveSQLFile(sqlStatement) {
 
 function generateCSV(csvFile, odbcDSN, odbcUser, odbcPassword) {
 	try {
-		execSync(`${process.cwd()}\\csvBuilder.exe ${odbcDSN} ${odbcUser} ${odbcPassword} sqlStatement.sql ${csvFile}`)
-	} catch (error) {
-		throw CSV_BUILDER_ERRORS[error.status] + " - " + error.message;
+		// run 32-bit versino of csvBuilder
+		execSync(`${process.cwd()}\\csvBuilder32.exe ${odbcDSN} ${odbcUser} ${odbcPassword} ${SQL_STATEMENT} ${csvFile}`)
+	} catch (error32) {
+		try {
+			// failover to run 64-bit versino of csvBuilder
+			execSync(`${process.cwd()}\\csvBuilder64.exe ${odbcDSN} ${odbcUser} ${odbcPassword} ${SQL_STATEMENT} ${csvFile}`)
+		}
+		catch (error64) {
+			throw CSV_BUILDER_ERRORS[error64.status] + " - " + error64.message;
+		}
 	}
 }
 

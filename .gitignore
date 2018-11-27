@@ -9,3 +9,4 @@ AppData
 pps-diagnosis-import-win32-x64
 *.exe
 sqlStatement.sql
+*.zip
