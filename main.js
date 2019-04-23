@@ -13,7 +13,7 @@ const {ipcMain} = require('electron');
 
 ipcMain.on("csv-parser-invoke", (event, arg) => {
 	try {
-		csvParser.parseCSV(arg["sqlText"], arg["csvFileLocation"], arg["xmlFileLocation"],arg["odbcDSN"], arg["odbcUser"], arg["odbcPassword"]);
+		csvParser.parseCSV(arg["sqlText"], arg["csvFileLocation"], arg["xmlFileLocation"],arg["odbcDSN"], arg["odbcUser"], arg["odbcPassword"], arg["odbcArch"]);
 	} catch (exception) {
 		event.sender.send("csv-parser-response", exception);
 		return;

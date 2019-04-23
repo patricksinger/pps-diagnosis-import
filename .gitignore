@@ -6,7 +6,7 @@ todo
 *.txt
 *.xls*
 AppData
-pps-diagnosis-import-win32-x64
+pps-diagnosis-import-win32-x64*
 *.exe
 sqlStatement.sql
 *.zip

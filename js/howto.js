@@ -192,7 +192,7 @@ function generateSQLHandler() {
     // TODO: find better way to address this string / format
     var sql = `select 
     pps.PATID,
-    PPS.CUSTHAGO_UID as module_id,
+    PPS.${settings.get("MAIN_PK_FIELD")} as module_id,
     'E' as main_action,
     (
     select top 1 DIAGC.diagnosis_code
@@ -288,6 +288,18 @@ function generateImportHandler() {
   // change to IPC
   //const remote = require("electron").remote;
   //const csvParser = remote.require('./csvparser'); 
+
+  // get arch selection
+  let archSelection = "";
+  if (document.getElementById("odbc-dsn-arch-32").checked) {
+    archSelection = document.getElementById("odbc-dsn-arch-32").value;
+  } else if (document.getElementById("odbc-dsn-arch-64").checked) {
+    archSelection = document.getElementById("odbc-dsn-arch-64").value
+  } else {
+    eventEmmitter.emit("message", "ODBC Driver Architecture Note Selected. Please Select and Submit Again.");
+    return;
+  }
+
   if (document.getElementById("sql-output-text").value.trim().length == 0 && !document.getElementById("odbc-dsn-inpt").value && !document.getElementById("odbc-user-inpt").value && !document.getElementById("odbc-password-inpt").value && !document.getElementById("xml-file-path").value) {
     eventEmmitter.emit("message", "Please make sure SQL Statement Generated, ODBC DSN, User Name, Password and Export File Location Fields are Entered");
   } else if (document.getElementById("sql-output-text").value.trim().length == 0) {
@@ -311,7 +323,8 @@ function generateImportHandler() {
         xmlFileLocation: document.getElementById("xml-file-path").value,
         odbcDSN: document.getElementById("odbc-dsn-inpt").value,
         odbcUser: document.getElementById("odbc-user-inpt").value,
-        odbcPassword: document.getElementById("odbc-password-inpt").value
+        odbcPassword: document.getElementById("odbc-password-inpt").value,
+        odbcArch: archSelection
       }
       ipcRenderer.send('csv-parser-invoke', csvParserOptions);
 

@@ -6,7 +6,7 @@
 select DIAGE.icd_code, REPLACE(STRING(CASE WHEN EP.date_of_discharge IS NULL THEN 'Active - ' ELSE 'Discharged - ' END ,'Episode', CASE WHEN COUNT(EP.PATID) > 1 THEN 's' ELSE '' END, ': ',
  LIST(DISTINCT EP.program_value),' - Diagnosis Code: ',DIAGE.icd_code, ' (',
 DIAGE.clinical_search_term, ') - Ranking: ' ,DIAGE.ranking_value,' - Classification: '
-,DIAGE.classification_value), ',' ,' / ') INTO :CODE,:VALUE
+,NVL(DIAGE.classification_value,'None')), ',' ,' / ') INTO :CODE,:VALUE
 FROM SYSTEM.episode_history as EP
 INNER JOIN SYSTEM.client_diagnosis_record DIAGR ON EP.PATID = DIAGR.PATID AND DIAGR.EPISODE_NUMBER = EP.EPISODE_NUMBER
 INNER JOIN SYSTEM.client_diagnosis_entry DIAGE ON DIAGE.DiagnosisRecord = DIAGR.ID AND DIAGE.PATID = DIAGR.PATID
@@ -22,7 +22,7 @@ ORDER BY EP.date_of_discharge ASC, EP.preadmit_admission_date DESC
 select DIAGE.icd_code, REPLACE(STRING(CASE WHEN EP.date_of_discharge IS NULL THEN 'Active - ' ELSE 'Discharged - ' END ,'Episode', CASE WHEN COUNT(EP.PATID) > 1 THEN 's' ELSE '' END, ': ',
  LIST(DISTINCT EP.program_value),' - Diagnosis Code: ',DIAGE.icd_code, ' (',
 DIAGE.clinical_search_term, ') - Ranking: ' ,DIAGE.ranking_value,' - Classification: '
-,DIAGE.classification_value), ',' ,' / ') INTO :CODE,:VALUE
+,NVL(DIAGE.classification_value, 'None')), ',' ,' / ') INTO :CODE,:VALUE
 FROM SYSTEM.episode_history as EP
 INNER JOIN SYSTEM.client_diagnosis_record DIAGR ON EP.PATID = DIAGR.PATID AND DIAGR.EPISODE_NUMBER = EP.EPISODE_NUMBER
 INNER JOIN SYSTEM.client_diagnosis_entry DIAGE ON DIAGE.DiagnosisRecord = DIAGR.ID AND DIAGE.PATID = DIAGR.PATID
@@ -37,7 +37,7 @@ ORDER BY EP.date_of_discharge ASC, EP.preadmit_admission_date DESC
 select DIAGE.icd_code, REPLACE(STRING(CASE WHEN EP.date_of_discharge IS NULL THEN 'Active - ' ELSE 'Discharged - ' END ,'Episode', CASE WHEN COUNT(EP.PATID) > 1 THEN 's' ELSE '' END, ': ',
  LIST(DISTINCT EP.program_value),' - Diagnosis Code: ',DIAGE.icd_code, ' (',
 DIAGE.clinical_search_term, ') - Ranking: ' ,DIAGE.ranking_value,' - Classification: '
-,DIAGE.classification_value), ',' ,' / ') INTO :CODE,:VALUE
+,NVL(DIAGE.classification_value, 'None')), ',' ,' / ') INTO :CODE,:VALUE
 FROM SYSTEM.episode_history as EP
 INNER JOIN SYSTEM.client_diagnosis_record DIAGR ON EP.PATID = DIAGR.PATID AND DIAGR.EPISODE_NUMBER = EP.EPISODE_NUMBER
 INNER JOIN SYSTEM.client_diagnosis_entry DIAGE ON DIAGE.DiagnosisRecord = DIAGR.ID AND DIAGE.PATID = DIAGR.PATID
@@ -52,7 +52,7 @@ ORDER BY EP.date_of_discharge ASC, EP.preadmit_admission_date DESC
 select DIAGE.icd_code, REPLACE(STRING(CASE WHEN EP.date_of_discharge IS NULL THEN 'Active - ' ELSE 'Discharged - ' END ,'Episode', CASE WHEN COUNT(EP.PATID) > 1 THEN 's' ELSE '' END, ': ',
  LIST(DISTINCT EP.program_value),' - Diagnosis Code: ',DIAGE.icd_code, ' (',
 DIAGE.clinical_search_term, ') - Ranking: ' ,DIAGE.ranking_value,' - Classification: '
-,DIAGE.classification_value), ',' ,' / ') INTO :CODE,:VALUE
+,NVL(DIAGE.classification_value, 'None')), ',' ,' / ') INTO :CODE,:VALUE
 FROM SYSTEM.episode_history as EP
 INNER JOIN SYSTEM.client_diagnosis_record DIAGR ON EP.PATID = DIAGR.PATID AND DIAGR.EPISODE_NUMBER = EP.EPISODE_NUMBER
 INNER JOIN SYSTEM.client_diagnosis_entry DIAGE ON DIAGE.DiagnosisRecord = DIAGR.ID AND DIAGE.PATID = DIAGR.PATID
@@ -67,7 +67,7 @@ ORDER BY EP.date_of_discharge ASC, EP.preadmit_admission_date DESC
 select DIAGE.icd_code, REPLACE(STRING(CASE WHEN EP.date_of_discharge IS NULL THEN 'Active - ' ELSE 'Discharged - ' END ,'Episode', CASE WHEN COUNT(EP.PATID) > 1 THEN 's' ELSE '' END, ': ',
  LIST(DISTINCT EP.program_value),' - Diagnosis Code: ',DIAGE.icd_code, ' (',
 DIAGE.clinical_search_term, ') - Ranking: ' ,DIAGE.ranking_value,' - Classification: '
-,DIAGE.classification_value), ',' ,' / ') INTO :CODE,:VALUE
+,NVL(DIAGE.classification_value, 'None')), ',' ,' / ') INTO :CODE,:VALUE
 FROM SYSTEM.episode_history as EP
 INNER JOIN SYSTEM.client_diagnosis_record DIAGR ON EP.PATID = DIAGR.PATID AND DIAGR.EPISODE_NUMBER = EP.EPISODE_NUMBER
 INNER JOIN SYSTEM.client_diagnosis_entry DIAGE ON DIAGE.DiagnosisRecord = DIAGR.ID AND DIAGE.PATID = DIAGR.PATID
@@ -83,7 +83,7 @@ ORDER BY EP.date_of_discharge ASC, EP.preadmit_admission_date DESC
 select DIAGE.icd_code, REPLACE(STRING(CASE WHEN EP.date_of_discharge IS NULL THEN 'Active - ' ELSE 'Discharged - ' END ,'Episode', CASE WHEN COUNT(EP.PATID) > 1 THEN 's' ELSE '' END, ': ',
  LIST(DISTINCT EP.program_value),' - Diagnosis Code: ',DIAGE.icd_code, ' (',
 DIAGE.clinical_search_term, ') - Ranking: ' ,DIAGE.ranking_value,' - Classification: '
-,DIAGE.classification_value), ',' ,' / ') INTO :CODE,:VALUE
+,NVL(DIAGE.classification_value, 'None')), ',' ,' / ') INTO :CODE,:VALUE
 FROM SYSTEM.episode_history as EP
 INNER JOIN SYSTEM.client_diagnosis_record DIAGR ON EP.PATID = DIAGR.PATID AND DIAGR.EPISODE_NUMBER = EP.EPISODE_NUMBER
 INNER JOIN SYSTEM.client_diagnosis_entry DIAGE ON DIAGE.DiagnosisRecord = DIAGR.ID AND DIAGE.PATID = DIAGR.PATID
@@ -99,7 +99,7 @@ ORDER BY EP.date_of_discharge ASC, EP.preadmit_admission_date DESC
 select DIAGE.icd_code, REPLACE(STRING(CASE WHEN EP.date_of_discharge IS NULL THEN 'Active - ' ELSE 'Discharged - ' END ,'Episode', CASE WHEN COUNT(EP.PATID) > 1 THEN 's' ELSE '' END, ': ',
  LIST(DISTINCT EP.program_value),' - Diagnosis Code: ',DIAGE.icd_code, ' (',
 DIAGE.clinical_search_term, ') - Ranking: ' ,DIAGE.ranking_value,' - Classification: '
-,DIAGE.classification_value), ',' ,' / ') INTO :CODE,:VALUE
+,NVL(DIAGE.classification_value, 'None')), ',' ,' / ') INTO :CODE,:VALUE
 FROM SYSTEM.episode_history as EP
 INNER JOIN SYSTEM.client_diagnosis_record DIAGR ON EP.PATID = DIAGR.PATID AND DIAGR.EPISODE_NUMBER = EP.EPISODE_NUMBER
 INNER JOIN SYSTEM.client_diagnosis_entry DIAGE ON DIAGE.DiagnosisRecord = DIAGR.ID AND DIAGE.PATID = DIAGR.PATID
@@ -115,7 +115,7 @@ ORDER BY EP.date_of_discharge ASC, EP.preadmit_admission_date DESC
 select DIAGE.icd_code, REPLACE(STRING(CASE WHEN EP.date_of_discharge IS NULL THEN 'Active - ' ELSE 'Discharged - ' END ,'Episode', CASE WHEN COUNT(EP.PATID) > 1 THEN 's' ELSE '' END, ': ',
  LIST(DISTINCT EP.program_value),' - Diagnosis Code: ',DIAGE.icd_code, ' (',
 DIAGE.clinical_search_term, ') - Ranking: ' ,DIAGE.ranking_value,' - Classification: '
-,DIAGE.classification_value), ',' ,' / ') INTO :CODE,:VALUE
+,NVL(DIAGE.classification_value, 'None')), ',' ,' / ') INTO :CODE,:VALUE
 FROM SYSTEM.episode_history as EP
 INNER JOIN SYSTEM.client_diagnosis_record DIAGR ON EP.PATID = DIAGR.PATID AND DIAGR.EPISODE_NUMBER = EP.EPISODE_NUMBER
 INNER JOIN SYSTEM.client_diagnosis_entry DIAGE ON DIAGE.DiagnosisRecord = DIAGR.ID AND DIAGE.PATID = DIAGR.PATID

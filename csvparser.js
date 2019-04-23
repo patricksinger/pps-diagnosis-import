@@ -17,10 +17,10 @@ const CSV_BUILDER_ERRORS = {
 
 const SQL_STATEMENT = 'sqlStatement.sql';
 
-function parseCSV(sqlStatement, csvFile, xmlFile, odbcDSN, odbcUser, odbcPassword) {
+function parseCSV(sqlStatement, csvFile, xmlFile, odbcDSN, odbcUser, odbcPassword, odbcArch) {
 	try {
 		saveSQLFile(sqlStatement);
-		generateCSV(csvFile, odbcDSN, odbcUser, odbcPassword);
+		generateCSV(csvFile, odbcDSN, odbcUser, odbcPassword, odbcArch);
 		csvParser()
 			.fromFile(csvFile)
 			.then((jsonOutput) => {
@@ -38,18 +38,19 @@ function saveSQLFile(sqlStatement) {
 	});
 }
 
-function generateCSV(csvFile, odbcDSN, odbcUser, odbcPassword) {
+function generateCSV(csvFile, odbcDSN, odbcUser, odbcPassword, odbcArch) {
+	console.log(odbcArch);
 	try {
-		// run 32-bit versino of csvBuilder
-		execSync(`${process.cwd()}\\csvBuilder32.exe ${odbcDSN} ${odbcUser} ${odbcPassword} ${SQL_STATEMENT} ${csvFile}`)
-	} catch (error32) {
-		try {
-			// failover to run 64-bit versino of csvBuilder
-			execSync(`${process.cwd()}\\csvBuilder64.exe ${odbcDSN} ${odbcUser} ${odbcPassword} ${SQL_STATEMENT} ${csvFile}`)
+		switch (odbcArch) {
+			case "32": execSync(`${process.cwd()}\\csvBuilder32.exe ${odbcDSN} ${odbcUser} ${odbcPassword} ${SQL_STATEMENT} ${csvFile}`);
+					break;
+			case "64": execSync(`${process.cwd()}\\csvBuilder64.exe ${odbcDSN} ${odbcUser} ${odbcPassword} ${SQL_STATEMENT} ${csvFile}`);
+					break;
+			default: throw "Unable to Identify ODBC Architecture to Utilize"
 		}
-		catch (error64) {
-			throw CSV_BUILDER_ERRORS[error64.status] + " - " + error64.message;
-		}
+	}
+	catch (error) {
+			throw CSV_BUILDER_ERRORS[error.status] + " - " + error.message;
 	}
 }
 
